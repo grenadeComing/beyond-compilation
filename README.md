@@ -47,11 +47,12 @@ The human-audit files contain only scores. R1–R4 are anonymized reviewers, and
 pip install -r analysis/requirements.txt
 python analysis/reproduce.py           # writes analysis/results.json
 python analysis/figures/fig_main_results.py docs/figure1.pdf
-python analysis/figures/fig_multi_model.py figure2.pdf
+python analysis/figures/fig_multi_model.py figure5.pdf
+python analysis/figures/fig_disagreement.py figure3.pdf
 python analysis/figures/appendix_figs.py .
 ```
 
-The first two figure scripts print an SVG to PDF with headless Chrome; set `CHROME` if Chrome is not at the default macOS path.
+The `fig_*` scripts print an SVG to PDF with headless Chrome; set `CHROME` if Chrome is not at the default macOS path.
 
 ## Running the agent and the judges
 
