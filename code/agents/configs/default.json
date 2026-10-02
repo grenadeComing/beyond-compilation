@@ -1,0 +1,13 @@
+{
+  "enabled_tools": [
+    "lean4_translation",
+    "lean_write_file",
+    "lean4_repl_runner",
+    "search_online",
+    "lean_inspect_name",
+    "lean_resolve_name"
+  ],
+  "system_prompt_file": "../prompts/default_system.txt",
+  "max_steps": 24,
+  "model": "gpt-5.2"
+}
