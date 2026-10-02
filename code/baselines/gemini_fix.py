@@ -1,0 +1,284 @@
+#!/usr/bin/env python3
+# oneshot_translation.py
+#
+# One-shot Lean4 translation using Gemini, then compile-check via Lean REPL tool.
+#
+# Usage:
+#   python oneshot_translation.py --model gpt-5.2 --max-workers 6
+#
+import sys
+import argparse
+import csv
+import json
+import logging
+import time
+import re
+import os
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Any, Dict, List, Tuple, Optional
+
+import requests
+from tqdm import tqdm
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
+# Import tools (do NOT set allowed_root here; do it in main after lean_output_dir exists)
+try:
+    from agents.tools.run_lean_tool import LeanReplTool
+    from agents.tools.base_tool import BaseTool
+except Exception as e:
+    LeanReplTool = None
+    BaseTool = None
+    _IMPORT_ERR = e
+else:
+    _IMPORT_ERR = None
+
+SYSTEM_PROMPT = r"""
+You are an expert Lean4 translation agent.
+
+Task: Translate the given natural-language mathematical statement into Lean4 (Mathlib) as a theorem/definition statement ONLY (NOT a proof).
+
+Hard requirements:
+- Output ONLY Lean code (no markdown fences, no explanations, no surrounding commentary).
+- The first line MUST be exactly: `import Mathlib`
+- Do NOT output any other `import ...` lines anywhere.
+- Do NOT use `open` or `open scoped` at the top level.
+- The final theorem/definition MUST end with `:= by sorry`
+- The statement should be well-typed and semantically faithful to the natural-language statement.
+
+Return only the Lean file content.
+"""
+
+
+
+def setup_logging(log_path: Path) -> None:
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers=[logging.FileHandler(log_path, mode="a", encoding="utf-8"), logging.StreamHandler()],
+        force=True,
+    )
+
+
+def safe_name(raw: str) -> str:
+    return (raw or "unnamed").replace("|", "_").replace("/", "_").replace("\\", "_").strip()
+
+
+def output_stem(idx: int, name: str) -> str:
+    return safe_name(f"{idx + 1:04d}_{name}")
+
+
+def extract_repl_pass(x: Any) -> Optional[int]:
+    """Return 1/0 if found, else None. Handles dict, stringified JSON, nested repl_output JSON."""
+    if isinstance(x, dict):
+        rp = x.get("repl_pass", None)
+        if isinstance(rp, bool):
+            return 1 if rp else 0
+        if isinstance(rp, int):
+            return 1 if rp == 1 else 0
+        if isinstance(rp, str) and rp.strip().isdigit():
+            return 1 if int(rp.strip()) == 1 else 0
+
+        ro = x.get("repl_output", None)
+        if isinstance(ro, str):
+            try:
+                ro_obj = json.loads(ro)
+                return extract_repl_pass(ro_obj)
+            except Exception:
+                pass
+        return None
+
+    if isinstance(x, str):
+        try:
+            obj = json.loads(x)
+            return extract_repl_pass(obj)
+        except Exception:
+            if '"repl_pass": 1' in x or "'repl_pass': 1" in x:
+                return 1
+            if '"repl_pass": 0' in x or "'repl_pass': 0" in x:
+                return 0
+            return None
+
+    return None
+
+
+def strip_lean_fences(text: str) -> str:
+    """If model returns ```lean ...```, extract inside; else return as-is."""
+    if not text:
+        return ""
+    s = text.strip()
+    m = re.search(r"```(?:lean|Lean|LEAN)?\s*\n([\s\S]*?)\n```", s)
+    if m:
+        return m.group(1).strip()
+    if s.startswith("```"):
+        s = re.sub(r"^```[^\n]*\n?", "", s)
+        s = re.sub(r"\n?```$", "", s)
+        return s.strip()
+    return s
+
+
+def load_entries(input_file: Path) -> List[Dict[str, Any]]:
+    with input_file.open("r", encoding="utf-8") as f:
+        return [json.loads(line) for line in f]
+
+
+def gemini_translate(nl_statement: str, model: str, api_key: str) -> str:
+    url = (
+        "https://generativelanguage.googleapis.com/v1beta/models/"
+        f"{model}:generateContent?key={api_key}"
+    )
+    payload = {
+        "systemInstruction": {"parts": [{"text": SYSTEM_PROMPT}]},
+        "contents": [{"role": "user", "parts": [{"text": nl_statement}]}],
+        "generationConfig": {"temperature": 0.2},
+    }
+    resp = requests.post(url, json=payload, timeout=120)
+    if resp.status_code != 200:
+        raise RuntimeError(f"Gemini API error: {resp.status_code} {resp.text}")
+    data = resp.json()
+    try:
+        text = data["candidates"][0]["content"]["parts"][0]["text"]
+    except Exception as e:
+        raise RuntimeError(f"Unexpected Gemini response format: {e}") from e
+    return strip_lean_fences((text or "").strip())
+
+
+def first_error_snip(repl_output: Any, limit: int = 400) -> str:
+    if repl_output is None:
+        return ""
+    s = str(repl_output).replace("\n", " ").strip()
+    return s[:limit]
+
+
+def process_one(
+    idx: int,
+    entry: Dict[str, Any],
+    lean_output_dir: Path,
+    model: str,
+    repl_tool: Any,
+    api_key: str,
+) -> Dict[str, Any]:
+    name = safe_name(entry.get("name", ""))
+    nl = entry.get("nl_statement", "") or ""
+    domain = entry.get("domain", "")
+
+    out_path = lean_output_dir / f"{output_stem(idx, name)}.lean"
+
+    try:
+        lean_code = gemini_translate(nl, model=model, api_key=api_key)
+        out_path.write_text(lean_code, encoding="utf-8")
+
+        repl = repl_tool.run(path=str(out_path))
+
+        rp = extract_repl_pass(repl)
+        compile_status = 1 if rp == 1 else 0
+
+        status = "success" if compile_status == 1 else "compile_failed"
+
+        return {
+            "row_index": idx + 1,
+            "name": name,
+            "domain": domain,
+            "status": status,
+            "steps": 1,
+            "compile_status": compile_status,
+            "io_error": "",
+            "nl_statement": nl,
+            "lean4_code": lean_code,
+            "repl_output": first_error_snip(repl.get("repl_output") if isinstance(repl, dict) else repl),
+        }
+
+    except Exception as e:
+        logging.error(f"Error processing {name}: {type(e).__name__}: {e}")
+        return {
+            "row_index": idx + 1,
+            "name": name,
+            "domain": domain,
+            "status": "oneshot_crashed",
+            "steps": 0,
+            "compile_status": 0,
+            "io_error": f"{type(e).__name__}: {e}",
+            "nl_statement": nl,
+            "lean4_code": "",
+            "repl_output": "",
+        }
+
+
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="One-shot Lean translation (Gemini) + REPL compile check.")
+    p.add_argument("--model", default="gemini-2.5-pro", help="Gemini model name (default: gemini-2.5-pro).")
+    p.add_argument("--input", default=None, help="Path to input JSONL (default: benchmark/benchmark.jsonl).")
+    p.add_argument("--max-workers", type=int, default=6, help="Thread workers (default: 6).")
+    return p.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+
+    if LeanReplTool is None or BaseTool is None:
+        raise SystemExit(f"REPL tool import failed: {_IMPORT_ERR}")
+
+    results_root = PROJECT_ROOT / "results"
+    results_root.mkdir(parents=True, exist_ok=True)
+
+    config_results_dir = results_root / safe_name(args.model)
+    lean_output_dir = config_results_dir / "lean_output"
+    config_results_dir.mkdir(parents=True, exist_ok=True)
+    lean_output_dir.mkdir(parents=True, exist_ok=True)
+
+    # ✅ critical: set allowed_root AFTER lean_output_dir exists
+    BaseTool.allowed_root = str(lean_output_dir)
+
+    setup_logging(config_results_dir / "translation.log")
+
+    input_file = Path(args.input) if args.input else (PROJECT_ROOT.parent / "benchmark/benchmark.jsonl")
+    if not input_file.exists():
+        raise SystemExit(f"Input JSONL not found at: {input_file}")
+
+    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not api_key:
+        raise SystemExit("Missing GEMINI_API_KEY environment variable.")
+
+    entries = load_entries(input_file)
+    logging.info(f"Loaded {len(entries)} entries from {input_file}")
+
+    repl_tool = LeanReplTool()
+
+    csv_path = config_results_dir / "agent_run_summary.csv"
+    fieldnames = [
+        "row_index", "name", "domain", "status", "steps", "compile_status",
+        "io_error", "nl_statement", "lean4_code", "repl_output"
+    ]
+
+    t0 = time.perf_counter()
+
+    rows: List[Tuple[int, Dict[str, Any]]] = []
+    with ThreadPoolExecutor(max_workers=args.max_workers) as ex:
+        futures = {
+            ex.submit(process_one, i, entry, lean_output_dir, args.model, repl_tool, api_key): i
+            for i, entry in enumerate(entries)
+        }
+        with tqdm(total=len(entries), desc="Processing entries") as pbar:
+            for fut in as_completed(futures):
+                rows.append((futures[fut], fut.result()))
+                pbar.update(1)
+
+    rows.sort(key=lambda x: x[0])
+
+    with csv_path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fieldnames)
+        w.writeheader()
+        for _, row in rows:
+            w.writerow(row)
+
+    t1 = time.perf_counter()
+    print(f"Done. Wrote CSV: {csv_path}")
+    print(f"Lean outputs: {lean_output_dir}")
+    print(f"Time: {t1 - t0:.2f}s")
+
+
+if __name__ == "__main__":
+    main()
