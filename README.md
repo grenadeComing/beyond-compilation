@@ -47,7 +47,7 @@ The human-audit files contain only scores. R1–R4 are anonymized reviewers, and
 
 GPT-6 Astra and Claude Opus 5.5 were run one-shot with the same prompt (`code/baselines/litellm_oneshot.py`) and Lean environment. Gemini-2.5-Pro was not available for these runs. Their files therefore have no Gemini grade, and `accepted` means the output compiles and GPT-5.2 grades it at least 9.
 
-Every compiling output that GPT-5.2 rejects was reviewed twice, in two independent AI-assisted reviews with Lean checks of the deciding definitions. The first review was done by Claude agents. The second was done by `gpt-6.1-sol`, which also judged a discussion round on six disputed items.
+Every compiling output that GPT-5.2 rejects was reviewed in two AI-assisted stages. Claude agents reviewed each output first, with Lean checks of the deciding definitions. `gpt-6.1-sol` then reviewed each output again with the first review in its prompt and was asked to check its claims; it also decided a discussion round on six disputed items.
 
 `checks/newer_models_review.jsonl` records both reviews, the final class of each output, and, for outputs that are not translation errors, the main reason the judge's rejection is wrong (`judge_failure`). The final classes are:
 - `T`: translation error;
