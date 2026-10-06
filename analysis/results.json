@@ -1176,6 +1176,46 @@
     "real_error_share_of_rejections": 0.1034
    }
   },
+  "reviewer_validation": {
+   "n": 74,
+   "agreement": {
+    "k": 58,
+    "n": 74,
+    "pct": 78.4,
+    "wilson95": [
+     67.7,
+     86.2
+    ]
+   },
+   "unfaithful_classified_T": {
+    "k": 47,
+    "n": 58,
+    "pct": 81.0,
+    "wilson95": [
+     69.1,
+     89.1
+    ]
+   },
+   "faithful_classified_not_T": {
+    "k": 11,
+    "n": 16,
+    "pct": 68.8,
+    "wilson95": [
+     44.4,
+     85.8
+    ]
+   },
+   "classes_unfaithful": {
+    "T": 47,
+    "J": 6,
+    "B": 5
+   },
+   "classes_faithful": {
+    "B": 5,
+    "T": 5,
+    "J": 6
+   }
+  },
   "regrade": {
    "rejected_not_errors": {
     "n": 50,
