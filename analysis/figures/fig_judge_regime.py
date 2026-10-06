@@ -6,7 +6,7 @@ Figure 1, from analysis/results.json; printed to PDF with headless Chrome.
 If a judge rejects a fraction f of faithful compiling outputs and accepts a fraction m of unfaithful ones,
 a system whose compiling outputs are unfaithful at rate e has a share e(1-m) / (e(1-m) + (1-e) f) of
 rejections that are real errors. Curves show f = 10% (solid) and f = 5% and 20% (dashed) with m = 10%;
-points are the systems (filled: human audit; open: AI-assisted review, where e counts errors among
+points are the systems (filled: human audit; open: review by Claude Opus 5.5 and GPT-6.1 Sol, where e counts errors among
 rejected outputs only). All text is bold so that it stays legible at column width.
 """
 
@@ -88,11 +88,11 @@ def svg() -> str:
         fill = ORANGE if human else "#fff"
         p.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="14" fill="{fill}" stroke="{ORANGE}" stroke-width="5"/>')
         p.append(text(x + dx, y + dy, name, 38, "serif", INK, anchor, HALO))
-    lx, ly = X0 + 34, Y1 + 42
+    lx, ly = X0 + 34, Y1 + 172
     p.append(f'<circle cx="{lx}" cy="{ly}" r="13" fill="{ORANGE}" stroke="{ORANGE}" stroke-width="5"/>')
     p.append(text(lx + 26, ly + 12, "human audit", 34, "hand", RED, "start"))
     p.append(f'<circle cx="{lx}" cy="{ly + 48}" r="13" fill="#fff" stroke="{ORANGE}" stroke-width="5"/>')
-    p.append(text(lx + 26, ly + 60, "AI-assisted review", 34, "hand", RED, "start"))
+    p.append(text(lx + 26, ly + 60, "Opus 5.5 + GPT-6.1 Sol", 34, "hand", RED, "start"))
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W / 300}in" height="{H / 300}in" '
             f'viewBox="0 0 {W} {H}">' + "".join(p) + "</svg>")
 
