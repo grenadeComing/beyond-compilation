@@ -1058,5 +1058,138 @@
   "Complex Analysis": 16,
   "Topology": 34,
   "Real Analysis": 56
+ },
+ "newer_models": {
+  "GPT-5.2": {
+   "n": 227,
+   "compile": 54,
+   "accepted": 47,
+   "compile_pct": 23.8,
+   "accepted_pct": 20.7,
+   "gap_pts": 3.1
+  },
+  "Gemini-2.5-Pro": {
+   "n": 227,
+   "compile": 65,
+   "accepted": 62,
+   "compile_pct": 28.6,
+   "accepted_pct": 27.3,
+   "gap_pts": 1.3
+  },
+  "Sonnet 4.5": {
+   "n": 227,
+   "compile": 96,
+   "accepted": 74,
+   "compile_pct": 42.3,
+   "accepted_pct": 32.6,
+   "gap_pts": 9.7
+  },
+  "GPT-5.2 agent": {
+   "n": 227,
+   "compile": 198,
+   "accepted": 134,
+   "compile_pct": 87.2,
+   "accepted_pct": 59.0,
+   "gap_pts": 28.2
+  },
+  "GPT-6 Astra": {
+   "n": 227,
+   "compile": 214,
+   "accepted": 189,
+   "compile_pct": 94.3,
+   "accepted_pct": 83.3,
+   "gap_pts": 11.0,
+   "review": {
+    "rejected": 25,
+    "final": {
+     "J": 16,
+     "B": 4,
+     "T": 1,
+     "J/B": 4
+    },
+    "translation_errors": 1,
+    "translation_errors_pts": 0.4
+   }
+  },
+  "Claude Opus 5.5": {
+   "n": 227,
+   "compile": 218,
+   "accepted": 189,
+   "compile_pct": 96.0,
+   "accepted_pct": 83.3,
+   "gap_pts": 12.8,
+   "review": {
+    "rejected": 29,
+    "final": {
+     "T": 3,
+     "J": 16,
+     "B": 7,
+     "J/B": 3
+    },
+    "translation_errors": 3,
+    "translation_errors_pts": 1.3
+   }
+  },
+  "judge_failures": {
+   "encoding": 20,
+   "defective_item": 11,
+   "identical": 10,
+   "wrong_reason": 9
+  },
+  "sonnet5_on_judge_failures": {
+   "graded": 49,
+   "also_rejects": 29
+  },
+  "false_rejection_rate": {
+   "Aristotle": {
+    "rejected_faithful": 3,
+    "faithful": 47,
+    "pct": 6.4,
+    "unfaithful_share": 0.1132,
+    "real_error_share_of_rejections": 0.5714
+   },
+   "GPT-5.2 agent": {
+    "rejected_faithful": 13,
+    "accepted": 131,
+    "audit_precision": 0.957,
+    "pct_estimated": 9.4,
+    "unfaithful_share": 0.3011,
+    "real_error_share_of_rejections": 0.806
+   },
+   "GPT-6 Astra": {
+    "rejected_not_at_fault": 24,
+    "accepted": 189,
+    "pct": 11.3,
+    "unfaithful_share": 0.0047,
+    "real_error_share_of_rejections": 0.04
+   },
+   "Claude Opus 5.5": {
+    "rejected_not_at_fault": 26,
+    "accepted": 189,
+    "pct": 12.1,
+    "unfaithful_share": 0.0138,
+    "real_error_share_of_rejections": 0.1034
+   }
+  },
+  "regrade": {
+   "rejected_not_errors": {
+    "n": 50,
+    "majority_accepts": 13,
+    "at_least_one_accepts": 24,
+    "at_least_one_rejects": 48
+   },
+   "rejected_errors": {
+    "n": 4,
+    "majority_accepts": 2,
+    "at_least_one_accepts": 3,
+    "at_least_one_rejects": 4
+   },
+   "accepted_sample": {
+    "n": 40,
+    "majority_accepts": 36,
+    "at_least_one_accepts": 39,
+    "at_least_one_rejects": 7
+   }
+  }
  }
 }

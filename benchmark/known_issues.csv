@@ -1,0 +1,19 @@
+id,name,kind,issue
+BC021,srdoty_alg_Sylow_777,false_in_source,"""Any proper normal subgroup"" must be nontrivial; the trivial subgroup is a counterexample (as in the source exercise)."
+BC092,srdoty_alg_linear-gps_708,false_in_source,"For the unsigned angle, the angle between X and rho_theta(X) equals theta only for theta in [0, pi]."
+BC179,benmckay_top_topology_472,false_in_source,False when one factor is empty and the other is not compact (the source's proof assumes nonempty spaces).
+BC180,benmckay_top_topology_495,false_in_source,False when one factor is empty and the other is not compact (the source's proof assumes nonempty spaces).
+BC181,benmckay_top_continuity_135,false_in_source,"The Hausdorff hypothesis is needed on Y, not on X."
+BC205,benmckay_top_covering-spaces_555,false_in_source,Needs local path-connectedness; the Warsaw circle is a counterexample.
+BC217,benmckay_top_covering-spaces_1064,false_in_source,Van Kampen needs path-connected triple intersections; the theta graph is a counterexample.
+BC218,benmckay_top_continuity_183,false_in_source,Not a topology for non-Hausdorff X unless the compact sets C are also closed.
+BC226,benmckay_top_continuity_22,false_in_source,"Continuity is equivalent to closure(f^-1 A) being contained in f^-1(closure A), not to equality."
+BC130,jirilebl_ra_ch-seq-ser_2847,extraction,"Restates the definition of conditional convergence, so it is a tautology; no matching exercise at the cited line."
+BC142,jirilebl_ra_ch-seq-funcs_1088,extraction,"Refers to an interval I ""as above"" that the statement never defines."
+BC183,benmckay_top_covering-spaces_452,extraction,The map to the fiber and the notation X_{y0} are not defined in the statement (the source calls it the endpoint map).
+BC199,benmckay_top_fundamental-groups_97,extraction,Keeps only the trivial definedness half of the source exercise and drops the homotopy claim.
+BC208,benmckay_top_fundamental-groups_97,extraction,"Assumes the concatenations are defined, which makes the definedness claim trivially true."
+BC215,benmckay_top_covering-spaces_1196,extraction,"The fiber F, the base point y0 and the connecting maps are not defined in the statement."
+BC216,benmckay_top_covering-spaces_886,extraction,"Drops the hypothesis that every X_a contains x0, and mixes ""every finite intersection"" with pairwise notation."
+BC044,srdoty_alg_linear-gps_385,undefined_term,"""Matrix group"" is not defined; it can mean a subgroup or a closed subgroup of GL(n)."
+BC048,srdoty_alg_linear-gps_411,undefined_term,"""Matrix group"" is not defined; it can mean a subgroup or a closed subgroup of GL(n)."

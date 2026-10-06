@@ -1,0 +1,94 @@
+{"id": "BC011", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC019", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC022", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [8, 9, 8, 9, 9]}
+{"id": "BC025", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 9, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC027", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 9, "regrades": [9, 6, 6, 10, 6]}
+{"id": "BC036", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC039", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 6, 8, 5, 9]}
+{"id": "BC039", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 6, "regrades": [7, 7, 8, 4, 5]}
+{"id": "BC040", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [5, 9, 9, 5, 6]}
+{"id": "BC041", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [8, 8, 8, 9, 8]}
+{"id": "BC042", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 6, "regrades": [4, 7, 6, 8, 6]}
+{"id": "BC044", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 6, "regrades": [8, 6, 8, 8, 8]}
+{"id": "BC044", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [7, 8, 6, 6, 7]}
+{"id": "BC045", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 6, "regrades": [4, 5, 5, 5, 5]}
+{"id": "BC046", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 7, "regrades": [8, 7, 7, 7, 7]}
+{"id": "BC048", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [7, 8, 7, 8, 7]}
+{"id": "BC050", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 5, "regrades": [8, 7, 6, 8, 8]}
+{"id": "BC056", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 8, 9, 9, 8]}
+{"id": "BC061", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 9, "regrades": [10, 9, 10, 10, 10]}
+{"id": "BC061", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 9]}
+{"id": "BC062", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [10, 10, 10, 10, 9]}
+{"id": "BC068", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [6, 9, 9, 10, 9]}
+{"id": "BC070", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [7, 8, 8, 6, 7]}
+{"id": "BC071", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 9, "regrades": [5, 5, 5, 5, 8]}
+{"id": "BC073", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 9, 10, 10]}
+{"id": "BC073", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [8, 9, 8, 9, 9]}
+{"id": "BC079", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC084", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC092", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 4, "regrades": [5, 5, 5, 5, 6]}
+{"id": "BC092", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 9, "regrades": [10, 10, 9, 9, 8]}
+{"id": "BC093", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC096", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [8, 10, 9, 9, 10]}
+{"id": "BC098", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC100", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC104", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC107", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC112", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC116", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 6]}
+{"id": "BC118", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [6, 8, 7, 9, 8]}
+{"id": "BC126", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [8, 8, 9, 9, 8]}
+{"id": "BC126", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC128", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 9, 10, 10, 10]}
+{"id": "BC130", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 4, "regrades": [4, 4, 4, 4, 5]}
+{"id": "BC132", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC134", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 9, "regrades": [9, 8, 8, 10, 8]}
+{"id": "BC135", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 10, 8, 10, 8]}
+{"id": "BC135", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 8, 8, 8, 9]}
+{"id": "BC137", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 9, 10, 9]}
+{"id": "BC138", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [10, 9, 8, 9, 8]}
+{"id": "BC139", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [6, 6, 6, 5, 8]}
+{"id": "BC139", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 9, 9]}
+{"id": "BC144", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC146", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC150", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 7, "regrades": [10, 10, 7, 9, 7]}
+{"id": "BC151", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC153", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC153", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 6, "regrades": [9, 7, 6, 9, 7]}
+{"id": "BC155", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 6, "regrades": [6, 6, 8, 6, 7]}
+{"id": "BC158", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 7, "regrades": [9, 7, 9, 9, 10]}
+{"id": "BC158", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 9, 7, 8, 8]}
+{"id": "BC160", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 9, 9, 9, 8]}
+{"id": "BC162", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC164", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC170", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC174", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 5, 6, 8, 9]}
+{"id": "BC176", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC178", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 5, 9]}
+{"id": "BC179", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC179", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 7, "regrades": [7, 7, 7, 7, 7]}
+{"id": "BC180", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 7, "regrades": [6, 7, 7, 7, 7]}
+{"id": "BC181", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 4, "regrades": [4, 10, 4, 4, 4]}
+{"id": "BC182", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [6, 5, 8, 8, 8]}
+{"id": "BC183", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [6, 8, 6, 8, 6]}
+{"id": "BC184", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 9, 9, 10, 9]}
+{"id": "BC189", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 9, 10, 10]}
+{"id": "BC190", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [8, 8, 8, 8, 8]}
+{"id": "BC194", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [8, 6, 5, 8, 7]}
+{"id": "BC199", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 4, "regrades": [4, 4, 5, 8, 8]}
+{"id": "BC199", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 10, 8, 9, 6]}
+{"id": "BC204", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC205", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [9, 6, 9, 8, 7]}
+{"id": "BC208", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 6, "regrades": [6, 6, 6, 8, 8]}
+{"id": "BC208", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 6, "regrades": [9, 9, 8, 9, 9]}
+{"id": "BC209", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 6, "regrades": [5, 7, 7, 7, 8]}
+{"id": "BC209", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 7, "regrades": [6, 7, 8, 8, 8]}
+{"id": "BC211", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [8, 8, 9, 9, 8]}
+{"id": "BC213", "model": "GPT-6 Astra", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 9, 9, 9]}
+{"id": "BC215", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 8, "regrades": [5, 5, 8, 6, 8]}
+{"id": "BC216", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 6, "regrades": [6, 6, 6, 6, 7]}
+{"id": "BC217", "model": "GPT-6 Astra", "group": "rejected", "original_gpt52_grade": 5, "regrades": [5, 5, 6, 6, 6]}
+{"id": "BC218", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 6, "regrades": [7, 8, 7, 8, 7]}
+{"id": "BC222", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 8, "regrades": [3, 4, 4, 5, 9]}
+{"id": "BC224", "model": "Claude Opus 5.5", "group": "accepted_sample", "original_gpt52_grade": 10, "regrades": [10, 10, 10, 10, 10]}
+{"id": "BC226", "model": "Claude Opus 5.5", "group": "rejected", "original_gpt52_grade": 2, "regrades": [5, 10, 10, 10, 10]}
