@@ -8,6 +8,9 @@ Conventions
   statements where `input_matches_benchmark` is true.
 - Effects are average high-minus-low differences over the other factors, with
   95% intervals from paired item-level bootstrap resampling (B = 10,000).
+- Newer models (GPT-6 Astra, Claude Opus 5.5) were not graded by Gemini-2.5-Pro, so
+  their table accepts an output if it compiles and GPT-5.2 grades it at least 9, and
+  applies that rule to every row.
 """
 
 from __future__ import annotations
@@ -31,6 +34,7 @@ ONE_SHOT = {"Kimina Prover": "kimina_prover", "Goedel Prover": "goedel_prover", 
             "Herald": "herald", "StepFun": "stepfun", "GPT-5.2": "gpt-52", "Gemini-2.5-Pro": "gemini-25-pro",
             "Sonnet 4.5": "sonnet_45"}
 FIGURE1 = ("Kimina Prover", "Goedel Prover", "Kimina AutoF", "Herald", "StepFun", "GPT-5.2", "Gemini-2.5-Pro")
+NEWER = {"GPT-6 Astra": "gpt-6-astra", "Claude Opus 5.5": "claude-opus-5-5"}
 
 
 def jsonl(path):
@@ -91,6 +95,7 @@ def system(path):
 
 one_shot = {s: system(OUT / "one_shot" / f"{f}.jsonl") for s, f in ONE_SHOT.items()}
 cfg = {c: system(OUT / "gpt52_agent" / f"config_{c}.jsonl") for c in CONFIGS}
+newer = {s: system(OUT / "newer_models" / f"{f}.jsonl") for s, f in NEWER.items()}
 alt = {"Sonnet 4.5": system(OUT / "other_orchestrators" / "sonnet45_agent_config_111.jsonl"),
        "Gemini-2.5-Pro": system(OUT / "other_orchestrators" / "gemini25pro_agent_config_111.jsonl")}
 
@@ -330,6 +335,85 @@ def judge_disagreement_by_domain():
     return dict(counts_)
 
 
+def newer_models():
+    """Newer one-shot models: compile, accepted (compiles and GPT-5.2 >= 9) and gap for every row,
+    and the final classes from the review of the newer models' rejected compiling outputs."""
+    def row(sys_, ids):
+        rs = [sys_[i] for i in ids]
+        comp = sum(r["compiles"] for r in rs)
+        acc = sum(r["compiles"] and (r["gpt52_grade"] or 0) >= 9 for r in rs)
+        return {"n": len(rs), "compile": comp, "accepted": acc, "compile_pct": pct(comp, len(rs)),
+                "accepted_pct": pct(acc, len(rs)), "gap_pts": round(100 * (comp - acc) / len(rs), 1)}
+    out = {s: row(one_shot[s], eval_ids(one_shot[s])) for s in ("GPT-5.2", "Gemini-2.5-Pro", "Sonnet 4.5")}
+    out["GPT-5.2 agent"] = row(cfg["111"], IDS)
+    review = jsonl(REPO / "checks" / "newer_models_review.jsonl")
+    for s, sys_ in newer.items():
+        out[s] = row(sys_, IDS)
+        mine = [r for r in review if r["model"] == s]
+        assert len(mine) == out[s]["compile"] - out[s]["accepted"]
+        errors = sum(r["final_category"] == "T" for r in mine)
+        out[s]["review"] = {"rejected": len(mine), "final": dict(Counter(r["final_category"] for r in mine)),
+                            "translation_errors": errors, "translation_errors_pts": round(100 * errors / len(IDS), 1)}
+    non_errors = [r for r in review if r["final_category"] != "T"]
+    out["judge_failures"] = dict(Counter(r["judge_failure"] for r in non_errors))
+    son = [newer[r["model"]][r["id"]]["sonnet5_grade"] for r in non_errors]
+    graded = [g for g in son if g is not None and g >= 0]
+    out["sonnet5_on_judge_failures"] = {"graded": len(graded), "also_rejects": sum(g < 9 for g in graded)}
+
+    # How often faithful compiling outputs are rejected, by system. Earlier systems use the human audits
+    # (all of Aristotle's sample; the agent's rejections, with its accepted outputs scaled by the positive
+    # audit's precision); newer models use the review (outputs that are not translation errors).
+    b = table(REPO / "human_audits" / "batch_B_aristotle_random.csv")
+    comp = [r for r in b if boolv(r["compiles"])]
+    fa = sum(boolv(r["criterion_faithful"]) and r["human_majority_faithful"] == "1" for r in comp)
+    fr = sum(not boolv(r["criterion_faithful"]) and r["human_majority_faithful"] == "1" for r in comp)
+    a = table(REPO / "human_audits" / "batch_A_agent_rejected.csv")
+    r1 = [r for r in table(REPO / "human_audits" / "reviewer1_accepted_outputs.csv")
+          if boolv(r["criterion_faithful"]) and not math.isnan(num(r["R1_grade"]))]
+    precision = sum(num(r["R1_grade"]) >= 9 for r in r1) / len(r1)
+    rescued = sum(r["human_majority_faithful"] == "1" for r in a)
+    acc111 = counts(cfg["111"], IDS)["faithful"]
+    # Also, for each system: e = unfaithful share of compiling outputs, and the share of rejected compiling
+    # outputs that are real errors. For the newer models only rejected outputs were reviewed, so e counts
+    # only errors among them (a lower bound).
+    ar = [r for r in comp if not boolv(r["criterion_faithful"])]
+    a_unf = sum(r["human_majority_faithful"] == "0" for r in a)
+    ar_unf = sum(r["human_majority_faithful"] == "0" for r in ar)
+    acc_unf = sum(boolv(r["criterion_faithful"]) and r["human_majority_faithful"] == "0" for r in comp)
+    comp111 = counts(cfg["111"], IDS)["compile"]
+    fr_rate = {"Aristotle": {"rejected_faithful": fr, "faithful": fa + fr, "pct": pct(fr, fa + fr),
+                             "unfaithful_share": round((ar_unf + acc_unf) / len(comp), 4),
+                             "real_error_share_of_rejections": round(ar_unf / len(ar), 4)},
+               "GPT-5.2 agent": {"rejected_faithful": rescued, "accepted": acc111, "audit_precision": round(precision, 3),
+                                 "pct_estimated": round(100 * rescued / (acc111 * precision + rescued), 1),
+                                 "unfaithful_share": round((a_unf + acc111 * (1 - precision)) / comp111, 4),
+                                 "real_error_share_of_rejections": round(a_unf / len(a), 4)}}
+    for s_, sys_ in newer.items():
+        mine = [r for r in review if r["model"] == s_]
+        nonerr = sum(r["final_category"] != "T" for r in mine)
+        err = len(mine) - nonerr
+        fr_rate[s_] = {"rejected_not_at_fault": nonerr, "accepted": out[s_]["accepted"],
+                       "pct": pct(nonerr, out[s_]["accepted"] + nonerr),
+                       "unfaithful_share": round(err / out[s_]["compile"], 4),
+                       "real_error_share_of_rejections": round(err / len(mine), 4)}
+    out["false_rejection_rate"] = fr_rate
+
+    # Re-grading: five more GPT-5.2 calls per output; "majority" = at least three of five grades >= 9.
+    final = {(r["id"], r["model"]): r["final_category"] for r in review}
+    rg = jsonl(REPO / "checks" / "newer_models_regrade.jsonl")
+    def flips(rows, want_accept):
+        maj = [sum(g >= 9 for g in r["regrades"]) > len(r["regrades"]) / 2 for r in rows]
+        return {"n": len(rows), "majority_accepts": sum(maj),
+                "at_least_one_accepts": sum(any(g >= 9 for g in r["regrades"]) for r in rows),
+                "at_least_one_rejects": sum(any(g < 9 for g in r["regrades"]) for r in rows)}
+    rej = [r for r in rg if r["group"] == "rejected"]
+    out["regrade"] = {
+        "rejected_not_errors": flips([r for r in rej if final[(r["id"], r["model"])] != "T"], True),
+        "rejected_errors": flips([r for r in rej if final[(r["id"], r["model"])] == "T"], True),
+        "accepted_sample": flips([r for r in rg if r["group"] == "accepted_sample"], False)}
+    return out
+
+
 def main():
     res = {"n": len(IDS), "domains": dict(Counter(DOMAIN.values()))}
     res["one_shot"] = {s: counts(sys_, eval_ids(sys_)) for s, sys_ in one_shot.items()}
@@ -344,6 +428,7 @@ def main():
     res["beq"] = beq()
     res["domain"] = domains()
     res["judge_disagreement_by_domain"] = judge_disagreement_by_domain()
+    res["newer_models"] = newer_models()
     path = REPO / "analysis" / "results.json"
     path.write_text(json.dumps(res, indent=1, ensure_ascii=False))
     print(f"wrote {path}")

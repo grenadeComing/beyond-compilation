@@ -18,8 +18,10 @@ A Lean declaration can compile while stating a different theorem from the one in
 | `outputs/gpt52_agent/` | Outputs of the GPT-5.2 agent under all eight tool configurations (`config_TFS`). |
 | `outputs/other_orchestrators/` | The full agent (config 111) with Sonnet 4.5 and Gemini-2.5-Pro as orchestrator. |
 | `outputs/trajectories/` | Tool-call logs of every agent run. |
+| `outputs/newer_models/` | One-shot outputs of GPT-6 Astra and Claude Opus 5.5, graded by GPT-5.2 and Sonnet 5 (see below). |
 | `human_audits/` | Reviewer scores for the three audits: accepted outputs (Reviewer 1), rejected compiling outputs (Batch A), and Aristotle's outputs on a random sample (Batch B). |
-| `checks/` | LeanScorer results on Batch B and BEq results on pairs of accepted outputs. |
+| `checks/` | LeanScorer results on Batch B, BEq results on pairs of accepted outputs, and the review of the newer models' rejected outputs (`newer_models_review.jsonl`). |
+| `benchmark/known_issues.csv` | Statements found to be false as written (as in their sources), changed during extraction, or dependent on an undefined term. |
 | `analysis/` | `reproduce.py` recomputes every number in the paper from the files above; `figures/` redraws the figures. |
 | `code/` | The agent, its tools and prompts, the judges, and the one-shot baselines. |
 
@@ -41,6 +43,20 @@ Each line of an `outputs/*.jsonl` file is one statement:
 
 The human-audit files contain only scores. R1–R4 are anonymized reviewers, and `human_majority_faithful` follows the paper's rule: at least two scores, a majority of scores ≥ 9, and compile failures counted as unfaithful. Batch B includes the judge grades of Aristotle's outputs but not the outputs themselves. Case B-017 is Aristotle's output for a duplicate copy of statement BC100 that was collected under a different name; it is counted as the output for BC100.
 
+## Newer models
+
+GPT-6 Astra and Claude Opus 5.5 were run one-shot with the same prompt (`code/baselines/litellm_oneshot.py`) and Lean environment. Gemini-2.5-Pro was not available for these runs. Their files therefore have no Gemini grade, and `accepted` means the output compiles and GPT-5.2 grades it at least 9.
+
+Every compiling output that GPT-5.2 rejects was reviewed twice, in two independent AI-assisted reviews with Lean checks of the deciding definitions. The first review was done by Claude agents. The second was done by `gpt-6.1-sol`, which also judged a discussion round on six disputed items.
+
+`checks/newer_models_review.jsonl` records both reviews, the final class of each output, and, for outputs that are not translation errors, the main reason the judge's rejection is wrong (`judge_failure`). The final classes are:
+- `T`: translation error;
+- `J`: faithful output that the judge rejected;
+- `B`: defect in the benchmark statement;
+- `J/B`: the reviews agree the output is not at fault but differ on the cause.
+
+`checks/newer_models_regrade.jsonl` holds five more GPT-5.2 grades for every rejected output and for 20 accepted outputs per model. `analysis/reproduce.py` recomputes the corresponding numbers under `newer_models` in `results.json`.
+
 ## Reproducing the paper's numbers and figures
 
 ```bash
@@ -49,6 +65,7 @@ python analysis/reproduce.py           # writes analysis/results.json
 python analysis/figures/fig_main_results.py docs/figure1.pdf
 python analysis/figures/fig_multi_model.py figure5.pdf
 python analysis/figures/fig_disagreement.py figure3.pdf
+python analysis/figures/fig_judge_regime.py judge_regime.pdf   # newer models: when rejections stop being informative
 python analysis/figures/appendix_figs.py .
 ```
 
