@@ -346,6 +346,13 @@ def newer_models():
                 "accepted_pct": pct(acc, len(rs)), "gap_pts": round(100 * (comp - acc) / len(rs), 1)}
     out = {s: row(one_shot[s], eval_ids(one_shot[s])) for s in ("GPT-5.2", "Gemini-2.5-Pro", "Sonnet 4.5")}
     out["GPT-5.2 agent"] = row(cfg["111"], IDS)
+    # Under the same rule, every compiling output GPT-5.2 rejects for the agent is in Batch A.
+    batch_a = {r["id"]: r["human_majority_faithful"] for r in table(REPO / "human_audits" / "batch_A_agent_rejected.csv")}
+    rej = [i for i in IDS if cfg["111"][i]["compiles"] and (cfg["111"][i]["gpt52_grade"] or 0) < 9]
+    assert all(i in batch_a for i in rej)
+    errs = sum(batch_a[i] == "0" for i in rej)
+    out["GPT-5.2 agent"]["human_audit"] = {"rejected": len(rej), "translation_errors": errs,
+                                          "translation_errors_pts": round(100 * errs / len(IDS), 1)}
     review = jsonl(REPO / "checks" / "newer_models_review.jsonl")
     for s, sys_ in newer.items():
         out[s] = row(sys_, IDS)

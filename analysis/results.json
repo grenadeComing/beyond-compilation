@@ -1090,7 +1090,12 @@
    "accepted": 134,
    "compile_pct": 87.2,
    "accepted_pct": 59.0,
-   "gap_pts": 28.2
+   "gap_pts": 28.2,
+   "human_audit": {
+    "rejected": 64,
+    "translation_errors": 53,
+    "translation_errors_pts": 23.3
+   }
   },
   "GPT-6 Astra": {
    "n": 227,
