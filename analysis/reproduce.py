@@ -367,40 +367,48 @@ def newer_models():
     graded = [g for g in son if g is not None and g >= 0]
     out["sonnet5_on_judge_failures"] = {"graded": len(graded), "also_rejects": sum(g < 9 for g in graded)}
 
-    # How often faithful compiling outputs are rejected, by system. Earlier systems use the human audits
-    # (all of Aristotle's sample; the agent's rejections, with its accepted outputs scaled by the positive
-    # audit's precision); newer models use the review (outputs that are not translation errors).
+    # How often faithful compiling outputs are rejected, by system, under acceptance by GPT-5.2 alone (the rule
+    # of the newer-model table). Earlier systems use the human audits: all of Aristotle's sample, and for the
+    # agent its rejections (all in Batch A) with its accepted outputs scaled by the positive audit's precision.
+    # Newer models use the review (outputs that are not translation errors, and only those judged faithful).
+    # e = unfaithful share of compiling outputs; for the newer models only rejected outputs were reviewed, so
+    # e counts only errors among them (a lower bound).
+    gacc = lambda r: (num(r["gpt52_grade"]) if not math.isnan(num(r["gpt52_grade"])) else 0) >= 9  # noqa: E731
     b = table(REPO / "human_audits" / "batch_B_aristotle_random.csv")
-    comp = [r for r in b if boolv(r["compiles"])]
-    fa = sum(boolv(r["criterion_faithful"]) and r["human_majority_faithful"] == "1" for r in comp)
-    fr = sum(not boolv(r["criterion_faithful"]) and r["human_majority_faithful"] == "1" for r in comp)
-    a = table(REPO / "human_audits" / "batch_A_agent_rejected.csv")
+    comp = [r for r in b if boolv(r["compiles"]) and r["human_majority_faithful"] != ""]
+    ar = [r for r in comp if not gacc(r)]
+    fa = sum(r["human_majority_faithful"] == "1" for r in comp)
+    fr = sum(r["human_majority_faithful"] == "1" for r in ar)
+    unf = sum(r["human_majority_faithful"] == "0" for r in comp)
+    fr_rate = {"Aristotle": {"rule": "compiles and GPT-5.2 >= 9", "rejected_faithful": fr, "faithful": fa, "pct": pct(fr, fa),
+                             "unfaithful_share": round(unf / len(comp), 4),
+                             "real_error_share_of_rejections": round((len(ar) - fr) / len(ar), 4)}}
+    a = {r["id"]: r["human_majority_faithful"] for r in table(REPO / "human_audits" / "batch_A_agent_rejected.csv")}
     r1 = [r for r in table(REPO / "human_audits" / "reviewer1_accepted_outputs.csv")
           if boolv(r["criterion_faithful"]) and not math.isnan(num(r["R1_grade"]))]
     precision = sum(num(r["R1_grade"]) >= 9 for r in r1) / len(r1)
-    rescued = sum(r["human_majority_faithful"] == "1" for r in a)
-    acc111 = counts(cfg["111"], IDS)["faithful"]
-    # Also, for each system: e = unfaithful share of compiling outputs, and the share of rejected compiling
-    # outputs that are real errors. For the newer models only rejected outputs were reviewed, so e counts
-    # only errors among them (a lower bound).
-    ar = [r for r in comp if not boolv(r["criterion_faithful"])]
-    a_unf = sum(r["human_majority_faithful"] == "0" for r in a)
-    ar_unf = sum(r["human_majority_faithful"] == "0" for r in ar)
-    acc_unf = sum(boolv(r["criterion_faithful"]) and r["human_majority_faithful"] == "0" for r in comp)
-    comp111 = counts(cfg["111"], IDS)["compile"]
-    fr_rate = {"Aristotle": {"rejected_faithful": fr, "faithful": fa + fr, "pct": pct(fr, fa + fr),
-                             "unfaithful_share": round((ar_unf + acc_unf) / len(comp), 4),
-                             "real_error_share_of_rejections": round(ar_unf / len(ar), 4)},
-               "GPT-5.2 agent": {"rejected_faithful": rescued, "accepted": acc111, "audit_precision": round(precision, 3),
-                                 "pct_estimated": round(100 * rescued / (acc111 * precision + rescued), 1),
-                                 "unfaithful_share": round((a_unf + acc111 * (1 - precision)) / comp111, 4),
-                                 "real_error_share_of_rejections": round(a_unf / len(a), 4)}}
+    c111 = [i for i in IDS if cfg["111"][i]["compiles"]]
+    g_ok = lambda i: (cfg["111"][i]["gpt52_grade"] or 0) >= 9  # noqa: E731
+    rej = [i for i in c111 if not g_ok(i)]
+    cons = [i for i in c111 if faithful(cfg["111"][i])]
+    gem_rej = [i for i in c111 if g_ok(i) and not faithful(cfg["111"][i])]   # GPT accepts, Gemini rejects: in Batch A
+    assert all(i in a for i in rej + gem_rej)
+    rescued = sum(a[i] == "1" for i in rej)
+    acc_faithful = len(cons) * precision + sum(a[i] == "1" for i in gem_rej)
+    acc_unf = len(cons) * (1 - precision) + sum(a[i] == "0" for i in gem_rej)
+    fr_rate["GPT-5.2 agent"] = {"rule": "compiles and GPT-5.2 >= 9", "rejected_faithful": rescued, "rejected": len(rej),
+                                "audit_precision": round(precision, 3),
+                                "pct_estimated": round(100 * rescued / (acc_faithful + rescued), 1),
+                                "unfaithful_share": round((len(rej) - rescued + acc_unf) / len(c111), 4),
+                                "real_error_share_of_rejections": round((len(rej) - rescued) / len(rej), 4)}
     for s_, sys_ in newer.items():
         mine = [r for r in review if r["model"] == s_]
         nonerr = sum(r["final_category"] != "T" for r in mine)
+        judged_faithful = sum(r["final_category"] == "J" for r in mine)
         err = len(mine) - nonerr
-        fr_rate[s_] = {"rejected_not_at_fault": nonerr, "accepted": out[s_]["accepted"],
+        fr_rate[s_] = {"rule": "compiles and GPT-5.2 >= 9", "rejected_not_at_fault": nonerr, "accepted": out[s_]["accepted"],
                        "pct": pct(nonerr, out[s_]["accepted"] + nonerr),
+                       "pct_judged_faithful_only": pct(judged_faithful, out[s_]["accepted"] + judged_faithful),
                        "unfaithful_share": round(err / out[s_]["compile"], 4),
                        "real_error_share_of_rejections": round(err / len(mine), 4)}
     out["false_rejection_rate"] = fr_rate

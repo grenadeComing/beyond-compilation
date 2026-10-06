@@ -1147,31 +1147,37 @@
   },
   "false_rejection_rate": {
    "Aristotle": {
-    "rejected_faithful": 3,
+    "rule": "compiles and GPT-5.2 >= 9",
+    "rejected_faithful": 1,
     "faithful": 47,
-    "pct": 6.4,
+    "pct": 2.1,
     "unfaithful_share": 0.1132,
-    "real_error_share_of_rejections": 0.5714
+    "real_error_share_of_rejections": 0.8
    },
    "GPT-5.2 agent": {
-    "rejected_faithful": 13,
-    "accepted": 131,
+    "rule": "compiles and GPT-5.2 >= 9",
+    "rejected_faithful": 11,
+    "rejected": 64,
     "audit_precision": 0.957,
-    "pct_estimated": 9.4,
+    "pct_estimated": 7.9,
     "unfaithful_share": 0.3011,
-    "real_error_share_of_rejections": 0.806
+    "real_error_share_of_rejections": 0.8281
    },
    "GPT-6 Astra": {
+    "rule": "compiles and GPT-5.2 >= 9",
     "rejected_not_at_fault": 24,
     "accepted": 189,
     "pct": 11.3,
+    "pct_judged_faithful_only": 7.8,
     "unfaithful_share": 0.0047,
     "real_error_share_of_rejections": 0.04
    },
    "Claude Opus 5.5": {
+    "rule": "compiles and GPT-5.2 >= 9",
     "rejected_not_at_fault": 26,
     "accepted": 189,
     "pct": 12.1,
+    "pct_judged_faithful_only": 7.8,
     "unfaithful_share": 0.0138,
     "real_error_share_of_rejections": 0.1034
    }

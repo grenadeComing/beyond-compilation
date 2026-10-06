@@ -5,8 +5,8 @@ Figure 1, from analysis/results.json; printed to PDF with headless Chrome.
 
 If a judge rejects a fraction f of faithful compiling outputs and accepts a fraction m of unfaithful ones,
 a system whose compiling outputs are unfaithful at rate e has a share e(1-m) / (e(1-m) + (1-e) f) of
-rejections that are real errors. Curves show f = 10% (solid) and f = 5% and 20% (dashed) with m = 10%;
-points are the systems (filled: human audit; open: review by Claude Opus 5.5 and GPT-6.1 Sol, where e counts errors among
+rejections that are real errors. The band spans f = 2% to 12%, the range measured on the four systems,
+and the solid curve is f = 10%, all with m = 10%; acceptance is by GPT-5.2 alone. Points are the systems (filled: human audit; open: review by Claude Opus 5.5 and GPT-6.1 Sol, where e counts errors among
 rejected outputs only). All text is bold so that it stays legible at column width.
 """
 
@@ -45,14 +45,21 @@ def text(x, y, s, size, font="serif", color=INK, anchor="middle", extra=""):
             f'fill="{color}" text-anchor="{anchor}" {extra}>{s}</text>')
 
 
-def curve(f: float, color: str, width: float, dash: str = "") -> str:
-    n = 200
-    pts = []
+def points(f: float, n: int = 200) -> list[str]:
+    out = []
     for i in range(n + 1):
         e = 10 ** (math.log10(E_MIN) + i / n * (math.log10(E_MAX) - math.log10(E_MIN)))
-        pts.append(f"{x_of(e):.1f},{y_of(share(e, f)):.1f}")
-    d = f' stroke-dasharray="{dash}"' if dash else ""
-    return f'<polyline points="{" ".join(pts)}" fill="none" stroke="{color}" stroke-width="{width}"{d}/>'
+        out.append(f"{x_of(e):.1f},{y_of(share(e, f)):.1f}")
+    return out
+
+
+def curve(f: float, color: str, width: float) -> str:
+    return f'<polyline points="{" ".join(points(f))}" fill="none" stroke="{color}" stroke-width="{width}"/>'
+
+
+def band(f_lo: float, f_hi: float, color: str) -> str:
+    # the upper edge is the lower false-rejection rate
+    return f'<polygon points="{" ".join(points(f_lo) + points(f_hi)[::-1])}" fill="{color}" stroke="none"/>'
 
 
 def svg() -> str:
@@ -73,12 +80,11 @@ def svg() -> str:
     mid = (Y0 + Y1) / 2
     p.append(text(62, mid, "rejections that are real errors (%)", 36, "serif", GREY,
                   extra=f'transform="rotate(-90 62 {mid})"'))
-    p.append(curve(0.05, "#c9c7c1", 4, "12 9"))
-    p.append(curve(0.20, "#c9c7c1", 4, "12 9"))
+    p.append(band(0.02, 0.12, "#dfe8f4"))
     p.append(curve(0.10, BLUE, 6))
     p.append(text(x_of(0.04) - 10, y_of(share(0.04, 0.10)) - 30, "f = 10%", 36, "hand", BLUE, "end", HALO))
     pts = [("GPT-5.2 agent", rates["GPT-5.2 agent"], True, "end", -26, -14),
-           ("Aristotle", rates["Aristotle"], True, "start", 24, 46),
+           ("Aristotle", rates["Aristotle"], True, "end", -24, 14),
            ("Opus 5.5", rates["Claude Opus 5.5"], False, "start", 26, 12),
            ("GPT-6 Astra", rates["GPT-6 Astra"], False, "start", 22, -62)]
     for name, r, human, anchor, dx, dy in pts:
@@ -88,7 +94,7 @@ def svg() -> str:
         fill = ORANGE if human else "#fff"
         p.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="14" fill="{fill}" stroke="{ORANGE}" stroke-width="5"/>')
         p.append(text(x + dx, y + dy, name, 38, "serif", INK, anchor, HALO))
-    lx, ly = X0 + 34, Y1 + 172
+    lx, ly = X0 + 34, Y1 + 42
     p.append(f'<circle cx="{lx}" cy="{ly}" r="13" fill="{ORANGE}" stroke="{ORANGE}" stroke-width="5"/>')
     p.append(text(lx + 26, ly + 12, "human audit", 34, "hand", RED, "start"))
     p.append(f'<circle cx="{lx}" cy="{ly + 48}" r="13" fill="#fff" stroke="{ORANGE}" stroke-width="5"/>')
