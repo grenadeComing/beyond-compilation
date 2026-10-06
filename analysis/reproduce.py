@@ -405,6 +405,20 @@ def newer_models():
                        "real_error_share_of_rejections": round(err / len(mine), 4)}
     out["false_rejection_rate"] = fr_rate
 
+    # The reviewer model against human labels: rejected compiling outputs of earlier systems with a
+    # human-majority label; a translation error (T) should match human-majority unfaithful.
+    human = {r["case_id"]: r["human_majority_faithful"] for r in table(REPO / "human_audits" / "batch_A_agent_rejected.csv")}
+    human.update({r["case_id"]: r["human_majority_faithful"] for r in table(REPO / "human_audits" / "batch_B_aristotle_random.csv")})
+    val = jsonl(REPO / "checks" / "reviewer_validation.jsonl")
+    unf = [r for r in val if human[r["case_id"]] == "0"]
+    fai = [r for r in val if human[r["case_id"]] == "1"]
+    out["reviewer_validation"] = {
+        "n": len(val), "agreement": rate(sum((r["category"] == "T") == (human[r["case_id"]] == "0") for r in val), len(val)),
+        "unfaithful_classified_T": rate(sum(r["category"] == "T" for r in unf), len(unf)),
+        "faithful_classified_not_T": rate(sum(r["category"] != "T" for r in fai), len(fai)),
+        "classes_unfaithful": dict(Counter(r["category"] for r in unf)),
+        "classes_faithful": dict(Counter(r["category"] for r in fai))}
+
     # Re-grading: five more GPT-5.2 calls per output; "majority" = at least three of five grades >= 9.
     final = {(r["id"], r["model"]): r["final_category"] for r in review}
     rg = jsonl(REPO / "checks" / "newer_models_regrade.jsonl")
