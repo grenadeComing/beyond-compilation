@@ -1,0 +1,83 @@
+[
+ {
+  "key": "BC062:astra",
+  "judge_claim": "With Mathlib's convention, `Equiv.swap 0 1 * Equiv.swap 1 2` is the 3-cycle inverse to (0 1 2), i.e. (0 2 1), not the stated 3-cycle (1 2 3).",
+  "status": "claim_refuted",
+  "formal_statement": "claim_beta_eq_cycle_012 : (Equiv.swap (0 : Fin 3) 1 * Equiv.swap 1 2 : Equiv.Perm (Fin 3)) = c[0, 1, 2]; claim_beta_ne_cycle_021 : (Equiv.swap (0 : Fin 3) 1 * Equiv.swap 1 2 : Equiv.Perm (Fin 3)) ≠ c[0, 2, 1]; claim_beta_values : β 0 = 1 ∧ β 1 = 2 ∧ β 2 = 0",
+  "explanation": "In Mathlib `(σ * τ) x = σ (τ x)`, so the output's β sends 0↦1↦2↦0. That is c[0,1,2], the relabeling of (1 2 3), and not c[0,2,1]; all three facts are proved by `decide`. The judge applied composition in the wrong order. As a bonus, the whole statement (closure {α, β} = ⊤) is proved without sorry.",
+  "checker_verified": true,
+  "note_on_scope": "Nothing else looks doubtful: α = swap 0 1 is (1 2) under the shift i ↦ i−1, and the statement is proved true in the snippet."
+ },
+ {
+  "key": "BC130:opus",
+  "judge_claim": "`¬ Summable (fun n => a (n+1))` asserts the series is not summable at all, rather than not absolutely summable, and this second conjunct contradicts the first hypothesis.",
+  "status": "claim_refuted",
+  "formal_statement": "claim_not_summable_iff_not_abs_summable (a : ℕ → ℝ) : ¬ Summable (fun n => a (n + 1)) ↔ ¬ Summable (fun n => |a (n + 1)|); claim_hyps_and_not_summable_consistent : ∃ a, (∃ L, Tendsto (partial sums over Icc 1 N of a) atTop (𝓝 L)) ∧ (¬ ∃ L, Tendsto (partial sums of |a|) atTop (𝓝 L)) ∧ ¬ Summable (fun n => a (n + 1)); claim_statement_true (the output's full statement)",
+  "explanation": "Mathlib's `Summable` means unconditional summability. For real sequences this is equivalent to absolute summability (`summable_abs_iff`), so `¬ Summable` here means exactly 'not absolutely convergent'. It does not contradict convergence of the partial sums: an alternating-harmonic witness satisfies h_conv, h_abs_div and ¬Summable at once. The output's full statement is also proved without sorry.",
+  "checker_verified": true,
+  "note_on_scope": "Nothing else looks doubtful: hypotheses and conclusion use the same 1-based partial sums, and conditional convergence is expressed correctly."
+ },
+ {
+  "key": "BC135:opus",
+  "judge_claim": "The output does not use Mathlib's standard `RiemannIntegrable`/`Integral` predicates, and it quantifies over a specific class of (grid) partitions rather than arbitrary tagged partitions.",
+  "status": "not_formalizable",
+  "formal_statement": "Supporting facts only: claim_no_degenerate_mathlib_box (a b : Fin n → ℝ) (i₀) (hi₀ : a i₀ = b i₀) : ¬ ∃ I : BoxIntegral.Box (Fin n), I.lower = a ∧ I.upper = b; claim_mathlib_box_sides_positive; claim_statement_true (the output's full statement)",
+  "explanation": "Whether grid (product) partitions are the right notion is a question about the textbook's definition of the Riemann integral on rectangles, which uses product partitions. It cannot be checked in Lean. The implied remedy also does not exist: Mathlib has no `RiemannIntegrable` constant (grep finds 0 hits). Its Riemann integral (`BoxIntegral`) is defined only on `BoxIntegral.Box`, whose sides are all strictly positive, so it cannot express a rectangle with a side of length 0; this is checked. The output's statement is proved true without sorry.",
+  "checker_verified": true,
+  "note_on_scope": "The grid-partition ε–δ formulation is a Riemann-sum characterization rather than the textbook's Darboux definition; on a degenerate rectangle both hold trivially, so I see no real gap."
+ },
+ {
+  "key": "BC150:opus",
+  "judge_claim": "The limit hypothesis `Tendsto (deriv f) (nhdsWithin c {c}ᶜ) (nhds L)` uses a punctured neighborhood in all of ℝ, not restricted to (a,b)\\{c}, so it is a strictly stronger hypothesis than intended.",
+  "status": "claim_refuted",
+  "formal_statement": "claim_punctured_nhds_eq_within_domain (a b c : ℝ) (hc : c ∈ Set.Ioo a b) : nhdsWithin c {c}ᶜ = nhdsWithin c (Set.Ioo a b \\ {c}); claim_hlim_iff_limit_within_domain : Tendsto (deriv f) (nhdsWithin c {c}ᶜ) (nhds L) ↔ Tendsto (deriv f) (nhdsWithin c (Set.Ioo a b \\ {c})) (nhds L)",
+  "explanation": "Because c is an interior point of (a,b), the punctured-neighborhood filter at c equals the filter of approach within (a,b)\\{c} (`nhdsWithin_inter_of_mem` with `Ioo_mem_nhds`). The output's limit hypothesis is therefore equivalent to the NL one, not strictly stronger.",
+  "checker_verified": true,
+  "note_on_scope": "Nothing else looks doubtful: f is total on ℝ, but only its behavior near points of the open interval matters for the hypotheses and conclusion used."
+ },
+ {
+  "key": "BC155:astra",
+  "judge_claim": "The ε–N condition on uniform m×…×m grid tagged sums is a nonstandard, stronger condition than 'f is Riemann integrable and ∫_R f = 0', potentially excluding cases covered by the NL statement.",
+  "status": "not_proved",
+  "formal_statement": null,
+  "explanation": "Mathematically the claim looks wrong. If f is Riemann integrable with integral 0, Riemann sums with mesh → 0 tend to 0, so the uniform-grid condition holds and the condition is implied, not stronger. Conversely, taking sup and inf over tags gives the uniform-grid Darboux sums, so the condition implies integrability with integral 0 on a nondegenerate box. A Lean check would require building uniform grids as `BoxIntegral` tagged partitions (Mathlib has no ready-made lemma) or developing Darboux theory, which is beyond the per-item budget, so no snippet was written.",
+  "checker_verified": null,
+  "note_on_scope": "The conclusion looks faithful (Mathlib's `volume E` on an arbitrary set is the outer measure); for a degenerate box the hypothesis holds for every f, but then E = Icc a b works, so I see no other problem."
+ },
+ {
+  "key": "BC158:astra",
+  "judge_claim": "Bounded plus a.e. `ContinuousWithinAt f (Icc a b)` is a sufficient but stronger condition than Riemann integrability, so the hypothesis materially strengthens the integrability assumption.",
+  "status": "not_proved",
+  "formal_statement": null,
+  "explanation": "By Lebesgue's criterion, a function on [a,b] is Riemann integrable iff it is bounded and its restriction to [a,b] is continuous a.e., which is exactly the output's hypothesis. So the hypothesis is equivalent, not stronger. Mathlib contains only the sufficiency direction (`BoxIntegral.integrable_of_bounded_and_ae_continuousWithinAt`); the necessity direction, which is what refuting the claim needs, is not in Mathlib and is too large to formalize within budget. No snippet was written.",
+  "checker_verified": null,
+  "note_on_scope": "The judge itself concedes that the Bochner interval integral agrees with the Riemann integral here; the partition encoding (StrictMono, endpoints, closed tag intervals) looks faithful."
+ },
+ {
+  "key": "BC199:astra",
+  "judge_claim": "The conditions `(p.trans q) 1 = z 0` and `x 1 = (q.trans r) 0` (with z, resp. x, not required to come from a Path) do not correctly capture the endpoint compatibility for definedness of (x*y)*z and x*(y*z).",
+  "status": "claim_refuted",
+  "formal_statement": "claim_lhs_iff_endpoints (x y z : ContinuousMap (Set.Icc (0:ℝ) 1) X) : (∃ a b c, ∃ p : Path a b, ∃ q : Path b c, p.toContinuousMap = x ∧ q.toContinuousMap = y ∧ (p.trans q) 1 = z 0) ↔ (x 1 = y 0 ∧ y 1 = z 0); claim_rhs_iff_endpoints : (∃ b c d, ∃ q : Path b c, ∃ r : Path c d, q.toContinuousMap = y ∧ r.toContinuousMap = z ∧ x 1 = (q.trans r) 0) ↔ (x 1 = y 0 ∧ y 1 = z 0); claim_statement_true",
+  "explanation": "Each side of the output's iff is equivalent to x(1) = y(0) ∧ y(1) = z(0). That is exactly the endpoint condition for (x*y)*z, resp. x*(y*z), to be defined. Every continuous map is a `Path` between its own endpoints, so not wrapping z (resp. x) in a Path loses nothing. The full statement is proved without sorry.",
+  "checker_verified": true,
+  "note_on_scope": "Nothing else looks doubtful; like the NL claim, the statement is essentially trivial once both sides are unfolded."
+ },
+ {
+  "key": "BC209:astra",
+  "judge_claim": "The output only concludes `IsCoveringMap p`, not that p is a universal covering (would need an `IsUniversalCover`-type statement); also `hcovering` is only a disjointness-of-translates condition rather than a standard covering / free action.",
+  "status": "not_formalizable",
+  "formal_statement": "Secondary claim only: claim_hcovering_iff_translates_pairwise_disjoint : hcovering-form ↔ (∀ y, ∃ U, IsOpen U ∧ y ∈ U ∧ ∀ g h : Γ, g ≠ h → Disjoint (g • U) (h • U)); claim_hcovering_implies_free : hcovering → ∀ γ y, γ • y = y → γ = 1",
+  "explanation": "The decisive 'universal' point is definitional. A universal cover is a covering map with simply connected total space; the output assumes `[SimplyConnectedSpace Y]` and concludes `IsCoveringMap p`, and Mathlib has no `IsUniversalCover` predicate (grep finds 0 hits), so this cannot be checked as a Lean fact. The secondary claim is refuted in Lean. `hcovering` is equivalent to Hatcher's covering-space-action condition (all translates gU pairwise disjoint), and it implies the action is free.",
+  "checker_verified": true,
+  "note_on_scope": "The theorem's truth relies on Y being path-connected (part of SimplyConnectedSpace) and locally path-connected (follows from hlocal), both available; I see no other mismatch, but the statement itself was not proved."
+ },
+ {
+  "key": "BC209:opus",
+  "judge_claim": "The output only asserts `IsCoveringMap`, not a universal covering property (e.g. `IsUniversalCover`); also the hypotheses encode local disjointness but do not explicitly require freeness.",
+  "status": "not_formalizable",
+  "formal_statement": "Secondary claim only: claim_hcov_implies_free : hcov → ∀ g y, g • y = y → g = 1; claim_hcov_iff_translates_pairwise_disjoint : hcov-form ↔ (∀ y, ∃ U ∈ nhds y, ∀ g h : Γ, g ≠ h → Disjoint (g • U) (h • U))",
+  "explanation": "The decisive 'universal' point is definitional. A universal cover is a covering map with simply connected total space; Y is assumed `SimplyConnectedSpace`, and Mathlib has no universal-cover predicate (grep finds 0 hits), so this is not a checkable Lean fact. The secondary claim is refuted in Lean. `hcov` implies freeness, and it is equivalent to Hatcher's condition that all translates gU are pairwise disjoint, so nothing is missing from the hypotheses.",
+  "checker_verified": true,
+  "note_on_scope": "U is only required to be a neighborhood, not open, which is harmless (take its interior); I see no other mismatch, but the statement itself was not proved."
+ }
+]

@@ -1,0 +1,14 @@
+{
+ "key": "BC184:astra",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.exists_universal_cover\n@@PN P.exists_universal_cover_of_locally_simply_connected",
+ "verified": true
+}

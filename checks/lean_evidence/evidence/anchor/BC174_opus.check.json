@@ -1,0 +1,14 @@
+{
+ "key": "BC174:opus",
+ "group": "anchor",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.contractible_connected_and_trivial_homotopyGroups\n@@PN P.contractible_connected_and_trivial_homotopyGroups",
+ "verified": true
+}

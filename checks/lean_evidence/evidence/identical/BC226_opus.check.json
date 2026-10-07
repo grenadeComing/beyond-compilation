@@ -1,0 +1,14 @@
+{
+ "key": "BC226:opus",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' does not depend on any axioms",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.continuous_iff_closure_preimage_eq\n@@PN P.continuous_iff_closure_preimage_eq",
+ "verified": true
+}

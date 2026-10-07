@@ -1,0 +1,14 @@
+{
+ "key": "BC181:astra",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.continuous_maps_eq_of_agree_on_dense\n@@PN P.eq_of_agree_on_dense",
+ "verified": true
+}

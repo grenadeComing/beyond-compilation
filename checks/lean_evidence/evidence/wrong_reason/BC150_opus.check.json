@@ -1,0 +1,19 @@
+{
+ "key": "BC150:opus",
+ "group": "wrong_reason",
+ "errors": [],
+ "axioms": {
+  "claim_punctured_nhds_eq_within_domain": {
+   "text": "'claim_punctured_nhds_eq_within_domain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_hlim_iff_limit_within_domain": {
+   "text": "'claim_hlim_iff_limit_within_domain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "",
+ "verified": true
+}

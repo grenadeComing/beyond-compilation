@@ -1,0 +1,14 @@
+{
+ "key": "BC150:opus",
+ "group": "anchor",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.deriv_at_point_of_limit_of_deriv\n@@PN P.jirilebl_ra_ch_der_1129",
+ "verified": true
+}

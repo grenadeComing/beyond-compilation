@@ -1,0 +1,14 @@
+{
+ "key": "BC153:opus",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.outer_measure_zero_of_small_supersets\n@@PN P.outer_measure_zero_of_arbitrarily_small_supersets",
+ "verified": true
+}

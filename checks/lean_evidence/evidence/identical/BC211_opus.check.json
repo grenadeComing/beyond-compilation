@@ -1,0 +1,14 @@
+{
+ "key": "BC211:opus",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.homotopy_fundamentalGroup_naturality\n@@PN P.homotopy_induced_fundamental_group_naturality",
+ "verified": true
+}

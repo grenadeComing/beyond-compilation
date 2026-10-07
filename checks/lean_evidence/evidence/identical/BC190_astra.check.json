@@ -1,0 +1,14 @@
+{
+ "key": "BC190:astra",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.coveringMap_induced_fundamentalGroup_injective\n@@PN P.covering_map_fundamentalGroup_injective",
+ "verified": true
+}

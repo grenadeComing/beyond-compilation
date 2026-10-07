@@ -1,0 +1,29 @@
+{
+ "key": "BC062:astra",
+ "group": "wrong_reason",
+ "errors": [],
+ "axioms": {
+  "claim_beta_values": {
+   "text": "'claim_beta_values' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_beta_eq_cycle_012": {
+   "text": "'claim_beta_eq_cycle_012' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_beta_ne_cycle_021": {
+   "text": "'claim_beta_ne_cycle_021' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_statement_true": {
+   "text": "'claim_statement_true' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "",
+ "verified": true
+}

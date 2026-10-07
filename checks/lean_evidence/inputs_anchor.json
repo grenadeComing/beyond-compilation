@@ -1,0 +1,92 @@
+[
+ {
+  "key": "BC042:astra",
+  "id": "BC042",
+  "nl": "Prove that $\\mathrm{O}(n)=\\{A\\in \\mathrm{GL}(n): A A^{\\mathsf{T}}=I\\}$.",
+  "lean": "import Mathlib\n\ntheorem orthogonal_group_eq (n : ℕ) :\n    {A : Matrix (Fin n) (Fin n) ℝ | A.transpose * A = 1} =\n    {A : Matrix (Fin n) (Fin n) ℝ | IsUnit A ∧ A * A.transpose = 1} := by sorry",
+  "gpt52_grade": 6,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe natural-language claim is: the orthogonal group O(n) equals the set of invertible matrices (A ∈ GL(n)) satisfying A * Aᵀ = I.\n\nThe Lean theorem instead states an equality of two subset-comprehensions of all n×n real matrices:\n- LHS: {A | Aᵀ * A = 1}\n- RHS: {A | IsUnit A ∧ A * Aᵀ = 1}.\n\nThis is related but not the same statement: it does not mention O(n) or GL(n) explicitly as a group, and it uses Aᵀ * A = 1 on the left rather than A * Aᵀ = 1. While these conditions are equivalent for units, the statement is a different equivalence of characterizations rather than “O(n) = {A ∈ GL(n) : A Aᵀ = I}” as written.\n### END THOUGHT",
+  "anchor_source": "Aristotle (Batch B human majority faithful)",
+  "anchor_lean": "import Mathlib\n\n/-- The orthogonal group O(n) equals the set of matrices A in GL(n) such that A * Aᵀ = I.\nSince any matrix satisfying A * Aᵀ = I is automatically invertible (with inverse Aᵀ),\nthe condition A ∈ GL(n) is redundant, and we state the characterization as a set equality. -/\ntheorem «srdoty_alg_linear-gps_366» (n : Type*) [DecidableEq n] [Fintype n] (R : Type*) [CommRing R] :\n    (Matrix.orthogonalGroup n R : Set (Matrix n n R)) = {A | A * A.transpose = 1} := by sorry\n"
+ },
+ {
+  "key": "BC046:opus",
+  "id": "BC046",
+  "nl": "Let $D(n)$ be the set of all diagonal matrices in $\\mathrm{GL}(n)$. Show that $D(n)$ is a matrix group.",
+  "lean": "import Mathlib\n\ntheorem diagonal_matrices_matrix_group (n : ℕ) :\n    ∃ H : Subgroup (GL (Fin n) ℝ),\n      (H : Set (GL (Fin n) ℝ)) =\n        {A : GL (Fin n) ℝ | ((A : Matrix (Fin n) (Fin n) ℝ)).IsDiag} ∧\n      IsClosed (H : Set (GL (Fin n) ℝ)) := by sorry",
+  "gpt52_grade": 7,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe Lean statement does capture the core idea that the set of diagonal matrices inside `GL (Fin n) ℝ` is the carrier of some `Subgroup`, which matches “D(n) is a matrix group” (i.e. a subgroup of `GL(n)`). However, it additionally requires `IsClosed (H : Set (GL (Fin n) ℝ))`, a topological closedness property not mentioned in the natural-language statement. This makes the Lean theorem strictly stronger than the NL claim rather than an equivalent translation.\n### END THOUGHT",
+  "anchor_source": "Aristotle (Batch B human majority faithful)",
+  "anchor_lean": "import Mathlib\n\nprivate lemma diag_one_mem (n : ℕ) (R : Type*) [DecidableEq R] [CommRing R] :\n    (1 : GL (Fin n) R).val.IsDiag := by sorry\n\nprivate lemma diag_inv_mem (n : ℕ) (R : Type*) [DecidableEq R] [CommRing R]\n    (M : GL (Fin n) R) (hM : (M : Matrix (Fin n) (Fin n) R).IsDiag) :\n    (M⁻¹ : GL (Fin n) R).val.IsDiag := by sorry\n\ndef srdoty_alg_linear_gps_404 (n : ℕ) (R : Type*) [DecidableEq R] [CommRing R] :\n    Subgroup (GL (Fin n) R) where\n  carrier := {M | (M : Matrix (Fin n) (Fin n) R).IsDiag}\n  mul_mem' := by\n    simp +decide [Matrix.IsDiag]\n    simp +contextual [Pairwise, Matrix.mul_apply]\n    intro a b ha hb i j hij; rw [Finset.sum_eq_single j] <;> aesop\n  one_mem' := diag_one_mem n R\n  inv_mem' := fun hM => diag_inv_mem n R _ hM\n"
+ },
+ {
+  "key": "BC092:astra",
+  "id": "BC092",
+  "nl": "Show that for any $\\theta\\in\\mathbb{R}$ and any nonzero $X\\in\\mathbb{R}^2$, the angle between $X$ and $\\rho_\\theta(X)$ equals $\\theta$ (hence $\\rho_\\theta$ is rotation by $\\theta$).",
+  "lean": "import Mathlib\n\ntheorem angle_eq_theta_of_rotation\n    (θ : ℝ) (X : EuclideanSpace ℝ (Fin 2)) (hX : X ≠ 0) :\n    InnerProductGeometry.angle X\n      (WithLp.toLp 2\n        ![Real.cos θ * X 0 - Real.sin θ * X 1,\n          Real.sin θ * X 0 + Real.cos θ * X 1]) = θ := by sorry",
+  "gpt52_grade": 4,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe Lean theorem states that for all real θ and all nonzero X ∈ ℝ², `InnerProductGeometry.angle X (rotθ X) = θ`, where `rotθ X` is given by the usual 2D rotation formula in coordinates.\nHowever, in Mathlib `InnerProductGeometry.angle` is the (unsigned) angle valued in [0, π]. Therefore the equality `= θ` cannot hold for arbitrary θ ∈ ℝ (e.g. θ = 2π would give angle 0, not 2π; negative θ also cannot match). The natural-language claim “for any θ ∈ ℝ” is thus not correctly captured unless one adds restrictions (θ ∈ [0, π]) or uses a modulo/argument notion.\nSo while the rotated vector expression matches the intended rotation, the claimed equality for all real θ is materially wrong for Mathlib’s `angle`.\n### END THOUGHT",
+  "anchor_source": "Aristotle (Batch B human majority faithful)",
+  "anchor_lean": "import Mathlib\n\n/-!\n# Rotation by θ in ℝ²\n\nWe show that for any θ ∈ ℝ and any nonzero X ∈ ℝ², the oriented angle between X and ρ_θ(X)\nequals θ, where ρ_θ denotes rotation by θ. This is formalized using the oriented angle and\nrotation from an orientation on a 2-dimensional real inner product space.\n-/\n\ninstance : Fact (Module.finrank ℝ (EuclideanSpace ℝ (Fin 2)) = 2) :=\n  ⟨by simp [finrank_euclideanSpace]⟩\n\n/-\nThe rotation matrix ρ_θ applied to a nonzero vector X ∈ ℝ² produces a vector whose\noriented angle from X is exactly θ. Here we work in `EuclideanSpace ℝ (Fin 2)` (i.e. ℝ²)\nwith the standard orientation.\n-/\ntheorem srdoty_alg_linear_gps_708\n    (o : Orientation ℝ (EuclideanSpace ℝ (Fin 2)) (Fin 2))\n    (θ : Real.Angle)\n    (X : EuclideanSpace ℝ (Fin 2))\n    (hX : X ≠ 0) :\n    o.oangle X (o.rotation θ X) = θ := by sorry\n"
+ },
+ {
+  "key": "BC126:astra",
+  "id": "BC126",
+  "nl": "Let $m^*$ be the outer measure on $\\mathbb{R}^n$ defined via coverings by countably many open rectangles. Prove that for any two subsets $A,B\\subset \\mathbb{R}^n$, we have $m^*(A\\cup B)\\le m^*(A)+m^*(B)$.",
+  "lean": "import Mathlib\n\ntheorem lebesgue_outer_measure_union_le\n    (n : ℕ) (A B : Set (Fin n → ℝ)) :\n    let mStar := (MeasureTheory.volume :\n      MeasureTheory.Measure (Fin n → ℝ)).toOuterMeasure\n    mStar (A ∪ B) ≤ mStar A + mStar B := by sorry",
+  "gpt52_grade": 8,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe Lean statement proves subadditivity for the outer measure `mStar` obtained as `volume.toOuterMeasure` on `Fin n → ℝ` (i.e. ℝ^n). This matches the intended inequality `m*(A ∪ B) ≤ m*(A) + m*(B)` for all sets A,B.\n\nHowever, the natural language defines m* specifically via coverings by countably many open rectangles (the classical Lebesgue outer measure construction), whereas the Lean code uses the outer measure induced from the existing Lebesgue measure `volume`. These are mathematically equivalent, but the Lean statement does not reflect that specific construction. Hence it is very close but not a perfect match to the stated definition.\n### END THOUGHT",
+  "anchor_source": "GPT-5.2 agent (Reviewer 1 score >= 9)",
+  "anchor_lean": "import Mathlib\n\nopen scoped BigOperators\n\n/-- Let `m*` be the Lebesgue outer measure on `ℝ^n` (modeled here as `Fin n → ℝ`).\nThen for any two subsets `A,B`, we have subadditivity on unions:\n`m* (A ∪ B) ≤ m* A + m* B`.\n\nThe problem statement defines `m*` via coverings by countably many open rectangles.\nIn Mathlib, we can use the outer measure associated to the standard Lebesgue measure\n`MeasureTheory.volume` on `Fin n → ℝ`. Any outer measure satisfies subadditivity on unions. -/\ntheorem jirilebl_ra_ch_multivar_int_2077 (n : ℕ) (A B : Set (Fin n → ℝ)) :\n    (MeasureTheory.Measure.toOuterMeasure (MeasureTheory.volume : MeasureTheory.Measure (Fin n → ℝ)))\n        (A ∪ B)\n      ≤ (MeasureTheory.Measure.toOuterMeasure (MeasureTheory.volume : MeasureTheory.Measure (Fin n → ℝ)))\n          A\n        + (MeasureTheory.Measure.toOuterMeasure (MeasureTheory.volume : MeasureTheory.Measure (Fin n → ℝ)))\n            B := by\n  sorry\n"
+ },
+ {
+  "key": "BC150:opus",
+  "id": "BC150",
+  "nl": "Let $f \\colon (a,b)\\to \\mathbb{R}$ be continuous and differentiable on $(a,b)\\setminus\\{c\\}$ for some $c\\in(a,b)$. Assume $\\lim_{x\\to c} f'(x)=L$ exists. Prove that $f$ is differentiable at $c$ and $f'(c)=L$.",
+  "lean": "import Mathlib\n\ntheorem deriv_at_point_of_limit_of_deriv (a b c L : ℝ) (f : ℝ → ℝ)\n    (hc : c ∈ Set.Ioo a b)\n    (hcont : ContinuousOn f (Set.Ioo a b))\n    (hdiff : ∀ x ∈ Set.Ioo a b, x ≠ c → DifferentiableAt ℝ f x)\n    (hlim : Filter.Tendsto (deriv f) (nhdsWithin c {c}ᶜ) (nhds L)) :\n    DifferentiableAt ℝ f c ∧ deriv f c = L := by sorry",
+  "gpt52_grade": 7,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe conclusion matches the NL claim (differentiable at c and deriv f c = L), and the hypotheses include continuity on (a,b) and differentiability at all x∈(a,b)\\{c}. However, the limit assumption is stated as `Tendsto (deriv f) (nhdsWithin c {c}ᶜ) (nhds L)`, i.e. a punctured neighborhood in all of ℝ, not restricted to approaching c *within* (a,b)\\{c}. The NL statement only requires the limit along the domain (a,b)\\{c}. Thus the Lean statement is a strictly stronger hypothesis than intended, so it is not an exact translation.\n### END THOUGHT",
+  "anchor_source": "GPT-5.2 agent (Reviewer 1 score >= 9)",
+  "anchor_lean": "import Mathlib\n\nopen Filter\n\ntheorem jirilebl_ra_ch_der_1129\n    {a b c L : ℝ} (hab : a < b) (hc : c ∈ Set.Ioo a b)\n    {f : ℝ → ℝ}\n    (hcont : ContinuousOn f (Set.Ioo a b))\n    (hdiff : DifferentiableOn ℝ f ((Set.Ioo a b) \\ {c}))\n    (hlim : Filter.Tendsto (fun x : ℝ => deriv f x) (nhdsWithin c ({c}ᶜ)) (nhds L)) :\n    DifferentiableAt ℝ f c ∧ deriv f c = L := by\n  sorry\n"
+ },
+ {
+  "key": "BC153:opus",
+  "id": "BC153",
+  "nl": "Suppose $X\\subset \\mathbb{R}^n$ is such that for every $\\epsilon>0$ there exists a set $Y\\supset X$ with $m^*(Y)\\le \\epsilon$, where $m^*$ is the outer measure on $\\mathbb{R}^n$. Prove that $X$ has measure zero (that is, $m^*(X)=0$).",
+  "lean": "import Mathlib\n\ntheorem outer_measure_zero_of_small_supersets (n : ℕ) (X : Set (EuclideanSpace ℝ (Fin n)))\n    (h : ∀ ε : ℝ, 0 < ε → ∃ Y : Set (EuclideanSpace ℝ (Fin n)),\n      X ⊆ Y ∧ MeasureTheory.volume Y ≤ ENNReal.ofReal ε) :\n    MeasureTheory.volume X = 0 := by sorry",
+  "gpt52_grade": 6,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe natural-language statement is about the Lebesgue outer measure m* on ℝ^n: ∀ ε>0, ∃ Y ⊇ X with m*(Y) ≤ ε, hence m*(X)=0.\n\nThe Lean theorem instead uses `MeasureTheory.volume` (a measure) directly, concluding `volume X = 0` from the existence of supersets with small `volume`. It does not mention `OuterMeasure`/`toOuterMeasure`, so it is not literally a statement about outer measure. While for Lebesgue measure this is closely related, the Lean statement is materially different (measure vs outer measure), especially for non-measurable sets.\n### END THOUGHT",
+  "anchor_source": "GPT-5.2 agent (Reviewer 1 score >= 9)",
+  "anchor_lean": "import Mathlib\n\n/-- If for every `ε > 0` there exists a set `Y ⊇ X` with outer measure `≤ ε`, then `X` has\nouter measure zero (with respect to Lebesgue measure on `ℝⁿ`). -/\ntheorem jirilebl_ra_ch_multivar_int_1932\n    {n : ℕ} (X : Set (Fin n → ℝ))\n    (h : ∀ ε > (0 : ℝ),\n      ∃ Y : Set (Fin n → ℝ), X ⊆ Y ∧ (MeasureTheory.volume.toOuterMeasure) Y ≤ (ENNReal.ofReal ε)) :\n    (MeasureTheory.volume.toOuterMeasure) X = 0 := by\n  sorry\n"
+ },
+ {
+  "key": "BC160:opus",
+  "id": "BC160",
+  "nl": "Let $f \\colon [a,b] \\to \\mathbb{R}$ be a bounded function, $\\{ a_n \\}_{n=1}^\\infty$ and $\\{b_n \\}_{n=1}^\\infty$ be sequences such that $a < a_n < b_n < b$ for all $n$, with $\\lim_{n\\to\\infty} a_n = a$ and $\\lim_{n\\to\\infty} b_n = b$. Suppose $f$ is Riemann integrable on $[a_n,b_n]$ for all $n$. Then $f$ is Riemann integrable on $[a,b]$ and $\\int_a^b f = \\lim_{n \\to \\infty} \\int_{a_n}^{b_n} f .$",
+  "lean": "import Mathlib\n\n/-- `f` is Riemann integrable on `[a, b]` with integral `I`: for every `ε > 0` there is a\n`δ > 0` such that every tagged partition of `[a, b]` with mesh `< δ` has Riemann sum\nwithin `ε` of `I`. -/\ndef HasRiemannIntegral (f : ℝ → ℝ) (a b : ℝ) (I : ℝ) : Prop :=\n  ∀ ε > 0, ∃ δ > 0, ∀ (n : ℕ) (x : Fin (n + 1) → ℝ) (t : Fin n → ℝ),\n    x 0 = a → x (Fin.last n) = b → Monotone x →\n    (∀ i : Fin n, x i.castSucc ≤ t i ∧ t i ≤ x i.succ) →\n    (∀ i : Fin n, x i.succ - x i.castSucc < δ) →\n    |(∑ i : Fin n, f (t i) * (x i.succ - x i.castSucc)) - I| < ε\n\ntheorem riemannIntegrable_of_limit_subintervals\n    (f : ℝ → ℝ) (a b : ℝ) (an bn : ℕ → ℝ)\n    (hbdd : ∃ M : ℝ, ∀ x ∈ Set.Icc a b, |f x| ≤ M)\n    (hab : ∀ n, a < an n ∧ an n < bn n ∧ bn n < b)\n    (ha : Filter.Tendsto an Filter.atTop (nhds a))\n    (hb : Filter.Tendsto bn Filter.atTop (nhds b))\n    (hint : ∀ n, ∃ I : ℝ, HasRiemannIntegral f (an n) (bn n) I) :\n    ∃ I : ℝ, HasRiemannIntegral f a b I ∧\n      ∀ J : ℕ → ℝ, (∀ n, HasRiemannIntegral f (an n) (bn n) (J n)) →\n        Filter.Tendsto J Filter.atTop (nhds I) := by sorry",
+  "gpt52_grade": 8,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe Lean theorem assumes f is bounded on Set.Icc a b, sequences an,bn with a < an n < bn n < b and an→a, bn→b, and Riemann integrability of f on each [an n, bn n]. It concludes existence of I with HasRiemannIntegral f a b I, and moreover that any sequence J n which serves as a Riemann integral value on each [an n, bn n] tends to I. This corresponds to “f is integrable on [a,b] and the integrals over [an,bn] converge to the integral over [a,b]”, but it is phrased using `HasRiemannIntegral` and a `Tendsto` statement, and quantifies over all choices of integral values J rather than directly stating `lim (∫_{an}^{bn} f) = ∫_a^b f`. That’s essentially the same intended meaning, though not a literal equation with a canonical integral function.\n### END THOUGHT",
+  "anchor_source": "GPT-5.2 agent (Batch A human majority faithful)",
+  "anchor_lean": "import Mathlib\n\nopen Set Filter TopologicalSpace\nopen scoped Topology Interval\n\n/-- Let `f` be a bounded function on `[a,b]`. Let `aₙ` and `bₙ` be sequences with\n`a < aₙ n < bₙ n < b` for all `n`, with `aₙ → a` and `bₙ → b`.\nAssume `f` is Riemann integrable on `[aₙ n, bₙ n]` for all `n`.\nThen `f` is Riemann integrable on `[a,b]` and\n`∫ x in a..b, f x = lim (∫ x in aₙ n..bₙ n, f x)`.\n\n(We use `IntervalIntegral` to express the Riemann integral on intervals.) -/\ntheorem jirilebl_ra_ch_riemann_1152\n    {f : ℝ → ℝ} {a b : ℝ} {aₙ bₙ : ℕ → ℝ}\n    (hbounded : Bornology.IsBounded (Set.range f))\n    (hab : a ≤ b)\n    (hinside : ∀ n, a < aₙ n ∧ aₙ n < bₙ n ∧ bₙ n < b)\n    (ha : Tendsto aₙ atTop (𝓝 a))\n    (hb : Tendsto bₙ atTop (𝓝 b))\n    (hInt : ∀ n, IntervalIntegrable f volume (aₙ n) (bₙ n)) :\n    IntervalIntegrable f volume a b ∧\n      Tendsto (fun n => ∫ x in (aₙ n)..(bₙ n), f x) atTop (𝓝 (∫ x in a..b, f x)) := by\n  sorry\n"
+ },
+ {
+  "key": "BC174:opus",
+  "id": "BC174",
+  "nl": "Prove that every contractible space is connected and has trivial homotopy groups.",
+  "lean": "import Mathlib\n\ntheorem contractible_connected_and_trivial_homotopyGroups\n    (X : Type*) [TopologicalSpace X] [ContractibleSpace X] :\n    ConnectedSpace X ∧ ∀ (n : ℕ) (x : X), Subsingleton (HomotopyGroup (Fin n) X x) := by sorry",
+  "gpt52_grade": 8,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe Lean statement asserts: for any type X with a topology and a `ContractibleSpace` instance, (1) `ConnectedSpace X` holds, and (2) for all natural numbers n and points x, the type `HomotopyGroup (Fin n) X x` is a subsingleton (i.e. the corresponding homotopy group is trivial). This matches the natural-language claim that contractible spaces are connected and have trivial homotopy groups, modulo two minor representational issues: it expresses “trivial” via `Subsingleton` rather than an explicit isomorphism to the trivial group, and it indexes homotopy groups by `Fin n` (a Mathlib encoding choice) rather than directly by n. Overall the meaning is essentially the same.\n### END THOUGHT",
+  "anchor_source": "GPT-5.2 agent (Reviewer 1 score >= 9)",
+  "anchor_lean": "import Mathlib\n\n/-- Every contractible space is connected and has trivial homotopy groups. -/\ntheorem contractible_connected_and_trivial_homotopyGroups\n    (X : Type*) [TopologicalSpace X] [ContractibleSpace X] :\n    ConnectedSpace X ∧ ∀ (n : ℕ) (x : X), Subsingleton (HomotopyGroup (Fin n) X x) := by\n  sorry\n"
+ },
+ {
+  "key": "BC180:opus",
+  "id": "BC180",
+  "nl": "Topological spaces \\(X\\) and \\(Y\\) are both compact just when their product is compact.",
+  "lean": "import Mathlib\n\n-- Nonemptiness is assumed: if X is empty, X × Y is empty and hence\n-- compact even when Y is not compact, so the plain equivalence fails.\ntheorem compact_and_compact_iff_prod_compact\n    (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y]\n    [Nonempty X] [Nonempty Y] :\n    (CompactSpace X ∧ CompactSpace Y) ↔ CompactSpace (X × Y) := by sorry",
+  "gpt52_grade": 7,
+  "gpt52_reason": "### BEGIN THOUGHT\nThe Lean statement asserts `(CompactSpace X ∧ CompactSpace Y) ↔ CompactSpace (X × Y)` but *adds* assumptions `[Nonempty X] [Nonempty Y]`. The natural-language statement gives the equivalence without any nonemptiness hypotheses. This is a material change: without `Nonempty`, the equivalence is false (e.g. `X` empty, `Y` non-compact gives `X×Y` empty hence compact). So the Lean formalization matches a corrected/strengthened version of the NL claim, not the NL claim as stated.\n### END THOUGHT",
+  "anchor_source": "GPT-5.2 agent (Reviewer 1 score >= 9)",
+  "anchor_lean": "import Mathlib\n\ntheorem benmckay_top_topology_495 (X Y : Type*) [TopologicalSpace X] [TopologicalSpace Y] :\n    (CompactSpace X ∧ CompactSpace Y) ↔ CompactSpace (X × Y) := by\n  sorry\n"
+ }
+]

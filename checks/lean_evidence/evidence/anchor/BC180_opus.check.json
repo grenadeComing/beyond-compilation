@@ -1,0 +1,16 @@
+{
+ "key": "BC180:opus",
+ "group": "anchor",
+ "errors": [
+  "unknown constant 'cert'"
+ ],
+ "axioms": {
+  "cert": {
+   "text": "",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH missing cert",
+ "verified": false
+}
