@@ -98,7 +98,8 @@ def svg() -> str:
     p.append(f'<circle cx="{lx}" cy="{ly}" r="13" fill="{ORANGE}" stroke="{ORANGE}" stroke-width="5"/>')
     p.append(text(lx + 26, ly + 12, "human audit", 34, "hand", RED, "start"))
     p.append(f'<circle cx="{lx}" cy="{ly + 48}" r="13" fill="#fff" stroke="{ORANGE}" stroke-width="5"/>')
-    p.append(text(lx + 26, ly + 60, "Opus 5.5 + GPT-6.1 Sol", 34, "hand", RED, "start"))
+    p.append(text(lx + 26, ly + 60, "Opus 5.5 +", 34, "hand", RED, "start"))
+    p.append(text(lx + 26, ly + 100, "GPT-6.1 Sol", 34, "hand", RED, "start"))
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W / 300}in" height="{H / 300}in" '
             f'viewBox="0 0 {W} {H}">' + "".join(p) + "</svg>")
 
