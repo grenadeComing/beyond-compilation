@@ -67,8 +67,8 @@ def svg() -> str:
     parts.append(f'<rect x="152" y="73" width="30" height="25" rx="4" fill="{ORANGE}"/>')
     parts.append(text(195, 96.5, "Compiles", 31.2, "serif", anchor="start"))
     parts.append(f'<rect x="367" y="73" width="30" height="25" rx="4" fill="{BLUE}"/>')
-    parts.append(text(410, 96.5, "Compiles and faithful", 31.2, "serif", anchor="start"))
-    parts.append(text(1601, 96, "gap = compiles minus faithful (points)", 29.7, "hand", GREY, "end"))
+    parts.append(text(410, 96.5, "Compiles and accepted", 31.2, "serif", anchor="start"))
+    parts.append(text(1601, 96, "gap = compiles minus accepted (points)", 29.7, "hand", GREY, "end"))
     for key, label, c in SYSTEMS:
         r = RES["figure1"][key]
         comp, faith, gap = r["compile_pct"], r["faithful_pct"], r["gap_pts"]
