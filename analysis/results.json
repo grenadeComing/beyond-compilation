@@ -1182,6 +1182,169 @@
     "real_error_share_of_rejections": 0.1034
    }
   },
+  "sensitivity_without_flagged": {
+   "flagged": 18,
+   "statements": 209,
+   "criterion": {
+    "Kimina Prover": {
+     "n": 200,
+     "compile": 24,
+     "faithful": 10,
+     "compile_pct": 12.0,
+     "faithful_pct": 5.0,
+     "gap_pts": 7.0,
+     "gpt_pos": 10,
+     "gem_pos": 12,
+     "consensus": 10,
+     "gpt_only": 0
+    },
+    "Goedel Prover": {
+     "n": 209,
+     "compile": 44,
+     "faithful": 14,
+     "compile_pct": 21.1,
+     "faithful_pct": 6.7,
+     "gap_pts": 14.4,
+     "gpt_pos": 15,
+     "gem_pos": 15,
+     "consensus": 14,
+     "gpt_only": 1
+    },
+    "Kimina AutoF": {
+     "n": 200,
+     "compile": 69,
+     "faithful": 26,
+     "compile_pct": 34.5,
+     "faithful_pct": 13.0,
+     "gap_pts": 21.5,
+     "gpt_pos": 26,
+     "gem_pos": 31,
+     "consensus": 26,
+     "gpt_only": 0
+    },
+    "Herald": {
+     "n": 209,
+     "compile": 46,
+     "faithful": 22,
+     "compile_pct": 22.0,
+     "faithful_pct": 10.5,
+     "gap_pts": 11.5,
+     "gpt_pos": 22,
+     "gem_pos": 25,
+     "consensus": 22,
+     "gpt_only": 0
+    },
+    "StepFun": {
+     "n": 200,
+     "compile": 39,
+     "faithful": 28,
+     "compile_pct": 19.5,
+     "faithful_pct": 14.0,
+     "gap_pts": 5.5,
+     "gpt_pos": 28,
+     "gem_pos": 32,
+     "consensus": 28,
+     "gpt_only": 0
+    },
+    "GPT-5.2": {
+     "n": 209,
+     "compile": 49,
+     "faithful": 42,
+     "compile_pct": 23.4,
+     "faithful_pct": 20.1,
+     "gap_pts": 3.3,
+     "gpt_pos": 43,
+     "gem_pos": 45,
+     "consensus": 42,
+     "gpt_only": 1
+    },
+    "Gemini-2.5-Pro": {
+     "n": 209,
+     "compile": 61,
+     "faithful": 58,
+     "compile_pct": 29.2,
+     "faithful_pct": 27.8,
+     "gap_pts": 1.4,
+     "gpt_pos": 58,
+     "gem_pos": 61,
+     "consensus": 58,
+     "gpt_only": 0
+    },
+    "Sonnet 4.5": {
+     "n": 209,
+     "compile": 88,
+     "faithful": 70,
+     "compile_pct": 42.1,
+     "faithful_pct": 33.5,
+     "gap_pts": 8.6,
+     "gpt_pos": 70,
+     "gem_pos": 81,
+     "consensus": 70,
+     "gpt_only": 0
+    },
+    "GPT-5.2 agent": {
+     "n": 209,
+     "compile": 182,
+     "faithful": 124,
+     "compile_pct": 87.1,
+     "faithful_pct": 59.3,
+     "gap_pts": 27.8,
+     "gpt_pos": 127,
+     "gem_pos": 147,
+     "consensus": 124,
+     "gpt_only": 3
+    }
+   },
+   "gpt_only": {
+    "GPT-5.2 agent": {
+     "n": 209,
+     "compile": 182,
+     "accepted": 127,
+     "compile_pct": 87.1,
+     "accepted_pct": 60.8,
+     "gap_pts": 26.3,
+     "human_audit": {
+      "rejected": 55,
+      "translation_errors": 45,
+      "translation_errors_pts": 21.5
+     }
+    },
+    "GPT-6 Astra": {
+     "n": 209,
+     "compile": 197,
+     "accepted": 182,
+     "compile_pct": 94.3,
+     "accepted_pct": 87.1,
+     "gap_pts": 7.2,
+     "review": {
+      "rejected": 15,
+      "final": {
+       "J": 14,
+       "T": 1
+      },
+      "either_review_T": 2
+     }
+    },
+    "Claude Opus 5.5": {
+     "n": 209,
+     "compile": 204,
+     "accepted": 184,
+     "compile_pct": 97.6,
+     "accepted_pct": 88.0,
+     "gap_pts": 9.6,
+     "review": {
+      "rejected": 20,
+      "final": {
+       "T": 3,
+       "J": 14,
+       "B": 1,
+       "J/B": 2
+      },
+      "either_review_T": 4
+     }
+    }
+   }
+  },
   "reviewer_validation": {
    "n": 74,
    "agreement": {

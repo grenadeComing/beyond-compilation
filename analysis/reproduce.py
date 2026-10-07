@@ -413,6 +413,26 @@ def newer_models():
                        "real_error_share_of_rejections": round(err / len(mine), 4)}
     out["false_rejection_rate"] = fr_rate
 
+    # Sensitivity: the same numbers without the statements flagged in benchmark/known_issues.csv.
+    flagged = {r["id"] for r in table(REPO / "benchmark" / "known_issues.csv")}
+    keep = [i for i in IDS if i not in flagged]
+    sens = {"flagged": len(flagged), "statements": len(keep), "criterion": {}, "gpt_only": {}}
+    for s_, sys_ in one_shot.items():
+        sens["criterion"][s_] = counts(sys_, [i for i in eval_ids(sys_) if i not in flagged])
+    sens["criterion"]["GPT-5.2 agent"] = counts(cfg["111"], keep)
+    sens["gpt_only"]["GPT-5.2 agent"] = row(cfg["111"], keep)
+    a_lab = {r["id"]: r["human_majority_faithful"] for r in table(REPO / "human_audits" / "batch_A_agent_rejected.csv")}
+    rej = [i for i in keep if cfg["111"][i]["compiles"] and (cfg["111"][i]["gpt52_grade"] or 0) < 9]
+    errs = sum(a_lab[i] == "0" for i in rej)
+    sens["gpt_only"]["GPT-5.2 agent"]["human_audit"] = {"rejected": len(rej), "translation_errors": errs,
+                                                        "translation_errors_pts": round(100 * errs / len(keep), 1)}
+    for s_, sys_ in newer.items():
+        mine = [r for r in review if r["model"] == s_ and r["id"] not in flagged]
+        sens["gpt_only"][s_] = row(sys_, keep)
+        sens["gpt_only"][s_]["review"] = {"rejected": len(mine), "final": dict(Counter(r["final_category"] for r in mine)),
+                                          "either_review_T": sum("T" in (r["first_review"]["category"], r["second_review"]["category"]) for r in mine)}
+    out["sensitivity_without_flagged"] = sens
+
     # The reviewer model against human labels: rejected compiling outputs of earlier systems with a
     # human-majority label; a translation error (T) should match human-majority unfaithful.
     human = {r["case_id"]: r["human_majority_faithful"] for r in table(REPO / "human_audits" / "batch_A_agent_rejected.csv")}
