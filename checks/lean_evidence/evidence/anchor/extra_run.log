@@ -1,0 +1,24 @@
+===== BC042:astra BC042_astra.lean
+[warning line 3] declaration uses 'sorry'
+[warning line 12] declaration uses 'sorry'
+[info line 78] 'cert_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+===== BC046:opus BC046_opus.manual.lean
+[warning line 3] declaration uses 'sorry'
+[warning line 11] declaration uses 'sorry'
+[warning line 14] declaration uses 'sorry'
+[info line 93] 'isClosed_diag' depends on axioms: [propext, Classical.choice, Quot.sound]
+[info line 94] 'cert_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+[info line 95] 'PClaim_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+===== BC092:astra BC092_astra.lean
+[warning line 3] declaration uses 'sorry'
+[warning line 28] declaration uses 'sorry'
+[info line 56] 'not_cert' depends on axioms: [propext, Classical.choice, Quot.sound]
+===== BC160:opus BC160_opus.lean
+[warning line 13] declaration uses 'sorry'
+[warning line 36] declaration uses 'sorry'
+[info line 149] 'claim_dirichlet_intervalIntegrable' depends on axioms: [propext, Classical.choice, Quot.sound]
+[info line 150] 'claim_dirichlet_not_riemann' depends on axioms: [propext, Classical.choice, Quot.sound]
+===== BC180:opus BC180_opus.lean
+[warning line 5] declaration uses 'sorry'
+[warning line 12] declaration uses 'sorry'
+[info line 46] 'not_cert' depends on axioms: [propext, Classical.choice, Quot.sound]

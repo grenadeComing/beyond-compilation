@@ -1,0 +1,24 @@
+{
+ "key": "BC130:opus",
+ "group": "wrong_reason",
+ "errors": [],
+ "axioms": {
+  "claim_not_summable_iff_not_abs_summable": {
+   "text": "'claim_not_summable_iff_not_abs_summable' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_statement_true": {
+   "text": "'claim_statement_true' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_hyps_and_not_summable_consistent": {
+   "text": "'claim_hyps_and_not_summable_consistent' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "",
+ "verified": true
+}

@@ -1,0 +1,56 @@
+[
+ {
+  "key": "BC042:astra",
+  "status": "not_equivalent",
+  "explanation": "Not equivalent as written, but only because the anchor is more general. Both statements are true. The anchor covers every finite index type and every commutative ring, while R covers only real matrices indexed by Fin n, which is the scope of the NL. P→R is derived from h; R→P cannot come from R and is proved outright from Mathlib's Matrix.mem_orthogonalGroup_iff, so cert does not count. cert_real (no sorry, both directions use h) shows that R is equivalent to the anchor specialized to ℝ and Fin n. check.py also cannot find the anchor theorem, because its name «srdoty_alg_linear-gps_366» keeps the guillemets ('missing P theorem').",
+  "checker_verified": false
+ },
+ {
+  "key": "BC046:opus",
+  "status": "not_proved",
+  "explanation": "check.py cannot process this item. The anchor has no theorem/lemma line, only private lemmas and a def building Subgroup (GL (Fin n) R) with carrier = diagonal matrices for any commutative ring R (its fields use sorried lemmas). main_thm therefore raises IndexError, and a snippet named BC046_opus.lean would crash the whole run, so the evidence is in BC046_opus.manual.lean (run via run_extra.py). Against the anchor's implicit claim specialized to ℝ, R is equivalent: cert_real is proved with no sorry and both directions use h, and the IsClosed conjunct that the judge objected to holds automatically (isClosed_diag). As in BC042, the anchor's claim over all commutative rings is more general (proved outright as PClaim_true) and does not follow from R.",
+  "checker_verified": false
+ },
+ {
+  "key": "BC092:astra",
+  "status": "not_equivalent",
+  "explanation": "R is false. It uses the unoriented InnerProductGeometry.angle, valued in [0, π], and claims it equals θ for every real θ; θ = -1 with X = e₀ contradicts angle_nonneg (R_false). The anchor uses the oriented angle o.oangle with θ : Real.Angle and is true (P_true, i.e. Orientation.oangle_rotation_self_right). not_cert : ¬(R ↔ P) is checked with no sorry, so the judge's objection is correct.",
+  "checker_verified": false
+ },
+ {
+  "key": "BC126:astra",
+  "status": "verified_equivalent",
+  "explanation": "The statements are the same up to a let-binding. R names volume.toOuterMeasure as mStar, P writes it inline, and the two are definitionally (zeta) equal, so each direction is h n A B. The judge's objection (rectangle-cover outer measure vs. volume.toOuterMeasure) applies equally to the human-accepted anchor.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC150:opus",
+  "status": "verified_equivalent",
+  "explanation": "The conclusions are the same. The limit hypothesis Tendsto (deriv f) (𝓝[≠] c) (𝓝 L), which the judge objected to, appears verbatim in the human-accepted anchor. The anchor's extra hypothesis a < b follows from c ∈ (a,b), and R's pointwise DifferentiableAt on (a,b)\\{c} is equivalent to P's DifferentiableOn on that open set. Checked in both directions.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC153:opus",
+  "status": "verified_equivalent",
+  "explanation": "R uses volume on EuclideanSpace ℝ (Fin n); P uses volume.toOuterMeasure on Fin n → ℝ. In Mathlib, μ s is by definition μ.toOuterMeasure s, so the judge's measure-vs-outer-measure objection does not apply. The canonical equivalence EuclideanSpace ℝ (Fin n) ≃ᵐ (Fin n → ℝ) preserves volume, which carries the hypothesis and the conclusion across for arbitrary, possibly non-measurable, sets. Checked in both directions.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC160:opus",
+  "status": "not_equivalent",
+  "explanation": "The two outputs use different integration theories. R formalizes Riemann integrability with its own tagged-partition HasRiemannIntegral (as in the NL). The anchor uses Mathlib's IntervalIntegrable (Lebesgue integrability), assumes f bounded on all of ℝ, and concludes convergence of Lebesgue interval integrals. Both theorems are true, so the iff could only be proved by proving each side outright; neither follows from the other. Checked separation: the Dirichlet function is IntervalIntegrable on [0,1] but has no R.HasRiemannIntegral there, so it meets P's integrability hypotheses while failing R's, and P's conclusion never yields R's conclusion (Riemann integrability on [a,b]).",
+  "checker_verified": false
+ },
+ {
+  "key": "BC174:opus",
+  "status": "verified_equivalent",
+  "explanation": "The rejected output is textually identical to the human-accepted anchor: the same statement with the same theorem name. cert is h in each direction, at a shared universe u.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC180:opus",
+  "status": "not_equivalent",
+  "explanation": "The human-accepted anchor is false and the rejected output is true. Without nonemptiness, X = Empty and Y = ℝ make X × Y empty, hence compact, while ℝ is not compact (P_false). The rejected output adds [Nonempty X] [Nonempty Y] and is proved (R_true), and not_cert : ¬(R ↔ P) is checked with no sorry. The judge's reason (Nonempty was added) points to exactly the correction that makes the statement true.",
+  "checker_verified": false
+ }
+]

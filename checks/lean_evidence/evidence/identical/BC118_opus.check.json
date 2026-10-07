@@ -1,0 +1,14 @@
+{
+ "key": "BC118:opus",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.bounded_convex_jordan_measurable\n@@PN P.bounded_convex_isJordanMeasurableSet",
+ "verified": true
+}

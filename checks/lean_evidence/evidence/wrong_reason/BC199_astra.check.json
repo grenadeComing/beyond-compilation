@@ -1,0 +1,24 @@
+{
+ "key": "BC199:astra",
+ "group": "wrong_reason",
+ "errors": [],
+ "axioms": {
+  "claim_lhs_iff_endpoints": {
+   "text": "'claim_lhs_iff_endpoints' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_rhs_iff_endpoints": {
+   "text": "'claim_rhs_iff_endpoints' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_statement_true": {
+   "text": "'claim_statement_true' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "",
+ "verified": true
+}

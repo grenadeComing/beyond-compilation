@@ -1,0 +1,52 @@
+{
+ "human_faithful": {
+  "n": 16,
+  "complete": 16,
+  "accepted_A": 8,
+  "accepted_B": 8,
+  "accepted_only_B": [],
+  "accepted_only_A": [],
+  "mcnemar_p": 1.0,
+  "mean_grade_A": 7.92,
+  "mean_grade_B": 7.77
+ },
+ "human_unfaithful": {
+  "n": 58,
+  "complete": 58,
+  "accepted_A": 1,
+  "accepted_B": 0,
+  "accepted_only_B": [],
+  "accepted_only_A": [
+   "A-013"
+  ],
+  "mcnemar_p": 1.0,
+  "mean_grade_A": 4.86,
+  "mean_grade_B": 4.67
+ },
+ "newer54_by_review_category": {
+  "T": {
+   "n": 4,
+   "accepted_A": 1,
+   "accepted_B": 0,
+   "complete": 4
+  },
+  "J": {
+   "n": 32,
+   "accepted_A": 10,
+   "accepted_B": 11,
+   "complete": 32
+  },
+  "B": {
+   "n": 11,
+   "accepted_A": 1,
+   "accepted_B": 1,
+   "complete": 11
+  },
+  "J/B": {
+   "n": 7,
+   "accepted_A": 3,
+   "accepted_B": 2,
+   "complete": 7
+  }
+ }
+}

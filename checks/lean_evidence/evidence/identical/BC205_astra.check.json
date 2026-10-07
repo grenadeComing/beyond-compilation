@@ -1,0 +1,14 @@
+{
+ "key": "BC205:astra",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+   "sorry": true,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES false\n@@RN R.universal_covering_iff_unique_pointed_morphism\n@@PN P.universal_covering_iff_unique_morphism",
+ "verified": false
+}

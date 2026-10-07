@@ -1,0 +1,14 @@
+{
+ "key": "BC160:opus",
+ "group": "identical",
+ "errors": [],
+ "axioms": {
+  "cert": {
+   "text": "'cert' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "@@MATCH true\n@@USES true\n@@RN R.riemannIntegrable_of_limit_subintervals\n@@PN P.riemann_integrable_of_exhaustion",
+ "verified": true
+}

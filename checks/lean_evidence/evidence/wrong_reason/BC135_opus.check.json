@@ -1,0 +1,24 @@
+{
+ "key": "BC135:opus",
+ "group": "wrong_reason",
+ "errors": [],
+ "axioms": {
+  "claim_mathlib_box_sides_positive": {
+   "text": "'claim_mathlib_box_sides_positive' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_no_degenerate_mathlib_box": {
+   "text": "'claim_no_degenerate_mathlib_box' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  },
+  "claim_statement_true": {
+   "text": "'claim_statement_true' depends on axioms: [propext, Classical.choice, Quot.sound]",
+   "sorry": false,
+   "extra": []
+  }
+ },
+ "match": "",
+ "verified": true
+}

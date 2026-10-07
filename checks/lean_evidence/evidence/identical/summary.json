@@ -1,0 +1,62 @@
+[
+ {
+  "key": "BC056:astra",
+  "status": "verified_equivalent",
+  "explanation": "R defines E t entrywise as `if i = j then 1 else if i = 0 then t else 0`, which equals P's `!![1, t; 0, 1]` (checked by fin_cases). `GL (Fin 2) F` is by definition `(Matrix (Fin 2) (Fin 2) F)ˣ`, and P's set `{M | ∃ g ∈ H, ↑g = M}` is exactly R's image `Units.val '' H`; the two sides of the equation are just swapped. So both assert the same existence of a subgroup of the units whose image is {E(t)}.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC118:opus",
+  "status": "verified_equivalent",
+  "explanation": "P's auxiliary `IsJordanMeasurableSet s` is by definition `IsBounded s ∧ volume (frontier s) = 0`, exactly R's conclusion. The remaining differences are explicit vs implicit binders for n and s and the order of the convexity and boundedness hypotheses.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC153:opus",
+  "status": "verified_equivalent",
+  "explanation": "P writes `volume.toOuterMeasure Y` and `volume.toOuterMeasure X` where R writes `volume Y` and `volume X`. In Mathlib a measure is applied to sets through its outer measure (`Measure.coe_toOuterMeasure` is rfl), so the statements are definitionally equal. The judge's objection that R uses a measure rather than the outer measure is therefore unfounded: R's `volume X` already is the outer measure of an arbitrary set.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC160:opus",
+  "status": "verified_equivalent",
+  "explanation": "The only substantive difference is in the Riemann-integral predicate: R allows partitions that are merely `Monotone`, while P requires strictly increasing ones. The cert proves these predicates equivalent: strict implies monotone, and conversely a degenerate subinterval adds f(t)*0 = 0 to the Riemann sum, so it can be deleted without changing the sum or the mesh (induction on the number of subintervals). The tag condition (`Set.Icc` vs. a conjunction), the ε/δ binder style, and P's hypothesis sitting after a `let` are all definitional.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC181:astra",
+  "status": "verified_equivalent",
+  "explanation": "The statements are identical except for the order of the instance arguments `[T2Space X]` and `[TopologicalSpace Y]` and the name of the dense set. Both put the Hausdorff assumption on the domain X, as the NL does. The judge rejected R (grade 4) because it wanted the codomain to be Hausdorff, but accepted the identical P (grade 10).",
+  "checker_verified": true
+ },
+ {
+  "key": "BC184:astra",
+  "status": "verified_equivalent",
+  "explanation": "R's local hypothesis (every open U containing x contains an open simply connected V containing x) is equivalent to P's: open simply connected neighbourhoods form a basis of the neighbourhood filter at x. Both directions are proved in the cert. In the conclusion, R also asks for `PathConnectedSpace Y`, which follows from `SimplyConnectedSpace Y` through a Mathlib instance; otherwise the conjuncts are only reordered.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC190:astra",
+  "status": "verified_equivalent",
+  "explanation": "R takes the covering map bundled as `f : C(X, Y)` with `IsCoveringMap ⇑f`, while P takes an unbundled `f : X → Y` and gets continuity from `hf.continuous`. The paths `p.map f.continuous` and `γ.map hf.continuous` differ only in the continuity proof, which is irrelevant, so each statement follows from the other by bundling or unbundling f.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC205:astra",
+  "status": "not_proved",
+  "explanation": "The two statements differ structurally. R's custom `CoveringMapForUniversalProperty` includes surjectivity, while Mathlib's `IsCoveringMap` in P allows empty fibres. As a result, R requires the simply connected cover q and the given cover p to be surjective, and its universal property ranges only over surjective coverings Z → Y; P's ranges over all coverings. For example, with Y two discrete points, a one-point U satisfies P's hY but has no surjective simply connected analogue. A direct translation would need CMUP ↔ IsCoveringMap ∧ Surjective plus lifting into non-surjective coverings, which was not done. Both closed statements appear false (Y = X = Warsaw circle with p = id: X is simply connected but its connected double cover has no section), which would make them only vacuously equivalent; this was not checked in Lean.",
+  "checker_verified": false
+ },
+ {
+  "key": "BC211:opus",
+  "status": "verified_equivalent",
+  "explanation": "The statements are the same apart from x₀ and x₁ being explicit in R and implicit in P. The continuity proofs passed to `Path.map` also differ (`by fun_prop` vs. an explicit `F.continuous.comp ...`), and these are irrelevant by proof irrelevance. Both state the same `Path.Homotopic` relation between the same two loops.",
+  "checker_verified": true
+ },
+ {
+  "key": "BC226:opus",
+  "status": "verified_equivalent",
+  "explanation": "The two statements are textually identical (same name, hypotheses and conclusion; only the line breaks differ). The judge gave R grade 2, correctly noting that the equality fails for continuous maps (e.g. ℚ ↪ ℝ), but gave the identical P grade 10, so its verdict on one of the two must be wrong. Both faithfully formalize the NL, whose stated equality is itself too strong.",
+  "checker_verified": true
+ }
+]
