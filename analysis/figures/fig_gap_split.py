@@ -16,14 +16,17 @@ import json
 import sys
 from pathlib import Path
 
-from fig_judge_regime import render, text
+import subprocess
+
+from fig_judge_regime import text
+from fig_main_results import CHROME
 from fig_main_results import GREY, GRID, GROUP, INK, ORANGE, RED, RES, bar_path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
-W, H = 1000, 820                      # same page size as fig_judge_regime.render
-X0, X1, Y0 = 150, 965, 610            # plot box; Y0 is the baseline
-PX = 14.0                             # pixels per percentage point
+W, H = 1000, 722                      # compact, so that the figure fits on the first page
+X0, X1, Y0 = 150, 965, 580            # plot box; Y0 is the baseline
+PX = 13.2                             # pixels per percentage point
 BAR = 120
 LIGHT = "#dfe8f4"                     # the band colour of the judge-regime figure
 CENTERS = (330, 605, 845)
@@ -79,15 +82,33 @@ def svg() -> str:
             p.append(text(cx, (ye + Y0) / 2 + 12, f"{r['errors']}", 36, "serif", "#fff"))
         else:
             p.append(text(cx + BAR / 2 + 12, ye - 4, f"{r['errors']}", 34, "serif", ORANGE, "start"))
-        p.append(text(cx, Y0 + 46, r["label"], 36, "serif", INK))
+        p.append(text(cx, Y0 + 42, r["label"], 36, "serif", INK))
     # group braces, as in Figure 1
     for name, a, b in (("human audit", CENTERS[0] - 80, CENTERS[0] + 80), ("model review", CENTERS[1] - 80, CENTERS[2] + 80)):
-        rr, yb = 11, Y0 + 72
+        rr, yb = 11, Y0 + 60
         p.append(f'<path d="M{a},{yb} Q{a},{yb + 11} {a + rr},{yb + 11} H{b - rr} Q{b},{yb + 11} {b},{yb}" '
                  f'fill="none" stroke="{GROUP}" stroke-width="3" stroke-linecap="round"/>')
-        p.append(text((a + b) / 2, yb + 56, name, 36, "hand", GROUP))
+        p.append(text((a + b) / 2, yb + 48, name, 36, "hand", GROUP))
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W / 300}in" height="{H / 300}in" '
             f'viewBox="0 0 {W} {H}">' + "".join(p) + "</svg>")
+
+
+def render(svg_text: str, out: Path) -> None:
+    """As fig_judge_regime.render (bold TeX Gyre Termes), with this figure's page size."""
+    fonts = HERE / "fonts"
+    page = HERE / "fig_gap_split.html"
+    page.write_text(f"""<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face {{ font-family: "Excalifont"; src: url("{(fonts / 'Excalifont-Latin.ttf').as_uri()}"); }}
+@font-face {{ font-family: "TeX Gyre Termes"; src: url("{(fonts / 'texgyretermes-regular.otf').as_uri()}"); font-weight: 400; }}
+@font-face {{ font-family: "TeX Gyre Termes"; src: url("{(fonts / 'texgyretermes-bold.otf').as_uri()}"); font-weight: 700; }}
+@page {{ size: {W / 300}in {H / 300}in; margin: 0; }}
+html, body {{ margin: 0; padding: 0; }} svg {{ display: block; }}
+</style></head><body>{svg_text}</body></html>""")
+    subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
+                    "--allow-file-access-from-files", "--virtual-time-budget=5000",
+                    f"--print-to-pdf={out}", page.as_uri()], check=True, capture_output=True)
+    page.unlink()
+    print(f"wrote {out}")
 
 
 if __name__ == "__main__":
