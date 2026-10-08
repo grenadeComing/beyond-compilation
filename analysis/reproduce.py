@@ -287,7 +287,14 @@ def audits():
 
 
 def beq():
-    rows = table(REPO / "checks" / "beq_pairs.csv")
+    # Anchors must be outputs that the expert confirmed in the released positive audit (score >= 9).
+    # This drops two anchors (BC188, BC224) whose expert score was given to a mismatched Lean output
+    # (the audit showed the output of another statement with the same name).
+    r1 = {r["id"] for r in table(REPO / "human_audits" / "reviewer1_accepted_outputs.csv")
+          if not math.isnan(num(r["R1_grade"])) and num(r["R1_grade"]) >= 9}
+    all_rows = table(REPO / "checks" / "beq_pairs.csv")
+    rows = [r for r in all_rows if r["id"] in r1]
+    dropped = sorted({r["id"] for r in all_rows} - r1)
     by = defaultdict(list)
     for r in rows:
         by[r["anchor"]].append(boolv(r["certified"]))
@@ -301,7 +308,9 @@ def beq():
         bs.append(k[s].sum() / n[s].sum() * 100)
     lo, hi = np.percentile(bs, [2.5, 97.5])
     same = [r for r in rows if boolv(r["same_normalized_encoding"])]
-    return {"anchors": len(ids), "pairs": len(rows), "certified": int(k.sum()),
+    diff = [r for r in rows if not boolv(r["same_normalized_encoding"])]
+    return {"anchors": len(ids), "pairs": len(rows), "certified": int(k.sum()), "dropped_anchor_ids": dropped,
+            "different_encoding": {"certified": sum(boolv(r["certified"]) for r in diff), "n": len(diff)},
             "certified_exact": sum(boolv(r["certified_by_exact"]) for r in rows),
             "anchor_bootstrap_ci95": [round(lo, 1), round(hi, 1)],
             "same_encoding": {"certified": sum(boolv(r["certified"]) for r in same), "n": len(same)}}

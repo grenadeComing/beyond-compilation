@@ -56,8 +56,9 @@ def svg() -> str:
     p.append(f'<line x1="{X0}" x2="{X1}" y1="{Y0}" y2="{Y0}" stroke="{INK}" stroke-width="3"/>')
     mid = (Y0 + Y0 - 30 * PX) / 2
     p.append(text(62, mid, "measured gap (points)", 36, "serif", GREY, extra=f'transform="rotate(-90 62 {mid})"'))
+    p.append(text(X0 + 14, 84, "judge: GPT-5.2 alone", 34, "hand", GREY, "start"))
     # legend, as in Figure 1
-    lx, ly = X0 + 380, 62
+    lx, ly = X0 + 430, 62
     p.append(f'<rect x="{lx}" y="{ly}" width="32" height="27" rx="4" fill="{ORANGE}"/>')
     p.append(text(lx + 44, ly + 24, "translation errors", 34, "serif", INK, "start"))
     p.append(f'<rect x="{lx}" y="{ly + 44}" width="32" height="27" rx="4" fill="{LIGHT}"/>')
