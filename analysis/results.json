@@ -962,17 +962,25 @@
   }
  },
  "beq": {
-  "anchors": 42,
-  "pairs": 189,
-  "certified": 116,
-  "certified_exact": 108,
+  "anchors": 40,
+  "pairs": 183,
+  "certified": 113,
+  "dropped_anchor_ids": [
+   "BC188",
+   "BC224"
+  ],
+  "different_encoding": {
+   "certified": 67,
+   "n": 137
+  },
+  "certified_exact": 105,
   "anchor_bootstrap_ci95": [
-   48.6,
-   72.7
+   48.9,
+   73.3
   ],
   "same_encoding": {
-   "certified": 49,
-   "n": 49
+   "certified": 46,
+   "n": 46
   }
  },
  "domain": {
