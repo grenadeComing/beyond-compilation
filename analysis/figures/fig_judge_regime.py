@@ -85,12 +85,15 @@ def svg() -> str:
     p.append(text(x_of(0.04) - 10, y_of(share(0.04, 0.10)) - 30, "f = 10%", 36, "hand", BLUE, "end", HALO))
     pts = [("GPT-5.2 agent", rates["GPT-5.2 agent"], True, "end", -26, -14),
            ("Aristotle", rates["Aristotle"], True, "end", -24, 14),
-           ("Opus 5.5", rates["Claude Opus 5.5"], False, "start", 26, 12),
+           ("Opus 5.5", rates["Claude Opus 5.5"], False, "start", 6, 54),
            ("GPT-6 Astra", rates["GPT-6 Astra"], False, "start", 22, -62)]
     for name, r, human, anchor, dx, dy in pts:
         x, y = x_of(r["unfaithful_share"]), y_of(r["real_error_share_of_rejections"])
         if name == "GPT-6 Astra":
             p.append(f'<line x1="{x:.1f}" y1="{y - 14:.1f}" x2="{x + 18:.1f}" y2="{y + dy + 10:.1f}" stroke="{GREY}" stroke-width="2.5"/>')
+        if not human:  # only rejected outputs were reviewed, so e is a lower bound: arrow to the right
+            p.append(f'<line x1="{x + 16:.1f}" y1="{y:.1f}" x2="{x + 84:.1f}" y2="{y:.1f}" stroke="{ORANGE}" stroke-width="4"/>')
+            p.append(f'<path d="M{x + 96:.1f},{y:.1f} L{x + 80:.1f},{y - 9:.1f} L{x + 80:.1f},{y + 9:.1f} Z" fill="{ORANGE}"/>')
         fill = ORANGE if human else "#fff"
         p.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="14" fill="{fill}" stroke="{ORANGE}" stroke-width="5"/>')
         p.append(text(x + dx, y + dy, name, 38, "serif", INK, anchor, HALO))

@@ -37,8 +37,8 @@ def svg() -> str:
     parts.append(f'<rect x="{X0 + 18}" y="40" width="30" height="25" rx="4" fill="{ORANGE}"/>')
     parts.append(text(X0 + 61, 63.5, "Compiles", 31.2, "serif", anchor="start"))
     parts.append(f'<rect x="{X0 + 233}" y="40" width="30" height="25" rx="4" fill="{BLUE}"/>')
-    parts.append(text(X0 + 276, 63.5, "Compiles and faithful", 31.2, "serif", anchor="start"))
-    parts.append(text(X0 + 18, 112, "gap = compiles minus faithful (points)", 29.7, "hand", GREY, "start"))
+    parts.append(text(X0 + 276, 63.5, "Compiles and accepted", 31.2, "serif", anchor="start"))
+    parts.append(text(X0 + 18, 112, "gap = compiles minus accepted (points)", 29.7, "hand", GREY, "start"))
     for label, r, c in SYSTEMS:
         comp, faith, gap = r["compile_pct"], r["faithful_pct"], r["gap_pts"]
         xo, xb = c - GAP / 2 - BAR, c + GAP / 2
