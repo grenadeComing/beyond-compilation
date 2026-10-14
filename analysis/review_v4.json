@@ -1,0 +1,324 @@
+{
+ "validation": {
+  "n": 69,
+  "human_errors": 57,
+  "human_faithful": 12,
+  "final_T": {
+   "finds_errors": {
+    "k": 47,
+    "n": 57,
+    "pct": 82.5,
+    "ci95": [
+     70.6,
+     90.2
+    ]
+   },
+   "leaves_faithful": {
+    "k": 8,
+    "n": 12,
+    "pct": 66.7,
+    "ci95": [
+     39.1,
+     86.2
+    ]
+   }
+  },
+  "either_stage_T": {
+   "finds_errors": {
+    "k": 54,
+    "n": 57,
+    "pct": 94.7,
+    "ci95": [
+     85.6,
+     98.2
+    ]
+   },
+   "leaves_faithful": {
+    "k": 5,
+    "n": 12,
+    "pct": 41.7,
+    "ci95": [
+     19.3,
+     68.0
+    ]
+   }
+  },
+  "flagged_but_human_faithful": [
+   "A-008 (BC148)",
+   "A-012 (BC072)",
+   "A-027 (BC160)",
+   "A-094 (BC019)"
+  ],
+  "by_system": {
+   "GPT-5.2 agent": {
+    "rejected": 64,
+    "human_errors": 53,
+    "review_T": 49,
+    "review_T_either": 58
+   },
+   "Aristotle": {
+    "rejected": 5,
+    "human_errors": 4,
+    "review_T": 2,
+    "review_T_either": 3
+   }
+  },
+  "single_reviewer_same_outputs": {
+   "finds_errors": {
+    "k": 46,
+    "n": 57,
+    "pct": 80.7,
+    "ci95": [
+     68.7,
+     88.9
+    ]
+   },
+   "leaves_faithful": {
+    "k": 8,
+    "n": 12,
+    "pct": 66.7,
+    "ci95": [
+     39.1,
+     86.2
+    ]
+   }
+  },
+  "agreement_with_majority": {
+   "n": 69,
+   "agreement_pct": 79.7,
+   "kappa": 0.41
+  },
+  "held_out_reviewer": {
+   "R2": {
+    "reference": "R3+R4 agree",
+    "reviewer": {
+     "n": 47,
+     "agreement_pct": 76.6,
+     "kappa": 0.18
+    },
+    "review": {
+     "n": 47,
+     "agreement_pct": 89.4,
+     "kappa": 0.39
+    }
+   },
+   "R3": {
+    "reference": "R2+R4 agree",
+    "reviewer": {
+     "n": 45,
+     "agreement_pct": 80.0,
+     "kappa": 0.23
+    },
+    "review": {
+     "n": 45,
+     "agreement_pct": 91.1,
+     "kappa": 0.56
+    }
+   },
+   "R4": {
+    "reference": "R2+R3 agree",
+    "reviewer": {
+     "n": 43,
+     "agreement_pct": 83.7,
+     "kappa": 0.28
+    },
+    "review": {
+     "n": 43,
+     "agreement_pct": 83.7,
+     "kappa": 0.44
+    }
+   }
+  },
+  "reviewer_pairs": {
+   "R2-R3": {
+    "n": 69,
+    "agreement_pct": 69.6,
+    "kappa": 0.27
+   },
+   "R2-R4": {
+    "n": 63,
+    "agreement_pct": 71.4,
+    "kappa": 0.12
+   },
+   "R3-R4": {
+    "n": 63,
+    "agreement_pct": 74.6,
+    "kappa": 0.16
+   }
+  }
+ },
+ "earlier_systems": {
+  "GPT-5.2": {
+   "statements": 227,
+   "compiling": 54,
+   "accepted": 47,
+   "rejected": 7,
+   "compile_pct": 23.8,
+   "accepted_pct": 20.7,
+   "gap_pts": 3.1,
+   "translation_errors": 5,
+   "translation_errors_either_stage": 6,
+   "translation_errors_pts": 2.2,
+   "translation_errors_either_pts": 2.6,
+   "final_classes": {
+    "T": 5,
+    "B": 1,
+    "J": 1
+   },
+   "real_error_share_of_rejections": 0.7143,
+   "unfaithful_share": 0.0926,
+   "errors_upper_bound": 6.1
+  },
+  "Gemini-2.5-Pro": {
+   "statements": 227,
+   "compiling": 65,
+   "accepted": 62,
+   "rejected": 3,
+   "compile_pct": 28.6,
+   "accepted_pct": 27.3,
+   "gap_pts": 1.3,
+   "translation_errors": 1,
+   "translation_errors_either_stage": 3,
+   "translation_errors_pts": 0.4,
+   "translation_errors_either_pts": 1.3,
+   "final_classes": {
+    "B": 2,
+    "T": 1
+   },
+   "real_error_share_of_rejections": 0.3333,
+   "unfaithful_share": 0.0154,
+   "errors_upper_bound": 1.2
+  },
+  "Herald": {
+   "statements": 227,
+   "compiling": 49,
+   "accepted": 23,
+   "rejected": 26,
+   "compile_pct": 21.6,
+   "accepted_pct": 10.1,
+   "gap_pts": 11.5,
+   "translation_errors": 23,
+   "translation_errors_either_stage": 24,
+   "translation_errors_pts": 10.1,
+   "translation_errors_either_pts": 10.6,
+   "final_classes": {
+    "T": 23,
+    "J": 2,
+    "B": 1
+   },
+   "real_error_share_of_rejections": 0.8846,
+   "unfaithful_share": 0.4694,
+   "errors_upper_bound": 26
+  },
+  "Kimina-Autoformalizer": {
+   "statements": 217,
+   "compiling": 73,
+   "accepted": 27,
+   "rejected": 46,
+   "compile_pct": 33.6,
+   "accepted_pct": 12.4,
+   "gap_pts": 21.2,
+   "translation_errors": 44,
+   "translation_errors_either_stage": 45,
+   "translation_errors_pts": 20.3,
+   "translation_errors_either_pts": 20.7,
+   "final_classes": {
+    "T": 44,
+    "J": 1,
+    "B": 1
+   },
+   "real_error_share_of_rejections": 0.9565,
+   "unfaithful_share": 0.6027,
+   "errors_upper_bound": 46
+  },
+  "StepFun-Formalizer": {
+   "statements": 217,
+   "compiling": 44,
+   "accepted": 30,
+   "rejected": 14,
+   "compile_pct": 20.3,
+   "accepted_pct": 13.8,
+   "gap_pts": 6.5,
+   "translation_errors": 11,
+   "translation_errors_either_stage": 12,
+   "translation_errors_pts": 5.1,
+   "translation_errors_either_pts": 5.5,
+   "final_classes": {
+    "T": 11,
+    "J": 2,
+    "B": 1
+   },
+   "real_error_share_of_rejections": 0.7857,
+   "unfaithful_share": 0.25,
+   "errors_upper_bound": 13.3
+  },
+  "Kimina-Prover": {
+   "statements": 217,
+   "compiling": 24,
+   "accepted": 10,
+   "rejected": 14,
+   "compile_pct": 11.1,
+   "accepted_pct": 4.6,
+   "gap_pts": 6.5,
+   "translation_errors": 14,
+   "translation_errors_either_stage": 14,
+   "translation_errors_pts": 6.5,
+   "translation_errors_either_pts": 6.5,
+   "final_classes": {
+    "T": 14
+   },
+   "real_error_share_of_rejections": 1.0,
+   "unfaithful_share": 0.5833,
+   "errors_upper_bound": 14
+  },
+  "Goedel-Prover": {
+   "statements": 227,
+   "compiling": 47,
+   "accepted": 15,
+   "rejected": 32,
+   "compile_pct": 20.7,
+   "accepted_pct": 6.6,
+   "gap_pts": 14.1,
+   "translation_errors": 31,
+   "translation_errors_either_stage": 31,
+   "translation_errors_pts": 13.7,
+   "translation_errors_either_pts": 13.7,
+   "final_classes": {
+    "T": 31,
+    "J": 1
+   },
+   "real_error_share_of_rejections": 0.9688,
+   "unfaithful_share": 0.6596,
+   "errors_upper_bound": 32
+  },
+  "total": {
+   "rejected": 142,
+   "T": 129,
+   "T_either": 135
+  }
+ },
+ "newer_models_bound": {
+  "GPT-6 Astra": {
+   "rejected": 25,
+   "translation_errors": 1,
+   "errors_upper_bound": 1.2
+  },
+  "Claude Opus 5.5": {
+   "rejected": 29,
+   "translation_errors": 3,
+   "errors_upper_bound": 3.6
+  }
+ },
+ "discussion_followed": {
+  "newer models": {
+   "second": 6
+  },
+  "validation": {
+   "second": 12
+  },
+  "earlier systems": {
+   "second": 9,
+   "first": 1
+  }
+ }
+}

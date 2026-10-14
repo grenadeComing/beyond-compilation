@@ -20,7 +20,7 @@ A Lean declaration can compile while stating a different theorem from the one in
 | `outputs/trajectories/` | Tool-call logs of every agent run. |
 | `outputs/newer_models/` | One-shot outputs of GPT-6 Astra and Claude Opus 5.5, graded by GPT-5.2 and Sonnet 5 (see below). |
 | `human_audits/` | Reviewer scores for the three audits: accepted outputs (Reviewer 1), rejected compiling outputs (Batch A), and Aristotle's outputs on a random sample (Batch B). |
-| `checks/` | LeanScorer results on Batch B, BEq results on pairs of accepted outputs, the review of the newer models' rejected outputs (`newer_models_review.jsonl`), a check of the reviewer model against human labels on earlier systems (`reviewer_validation.jsonl`), Lean checks of the newer models' rejections (`lean_evidence/`: proofs, the fixed checker and its records), and the judge with and without the Mathlib definitions each output uses (`definitions_experiment/`). |
+| `checks/` | LeanScorer results on Batch B, BEq results on pairs of accepted outputs, the review of the newer models' rejected outputs (`newer_models_review.jsonl`), a check of the reviewer model against human labels on earlier systems (`reviewer_validation.jsonl`), the full two-stage review of the 69 human-labeled rejections that validates it (`review_validation.jsonl`) and of the seven earlier one-shot systems' rejections (`earlier_systems_review.jsonl`), with their prompts and Lean checks (`review_v4/`), Lean checks of the newer models' rejections (`lean_evidence/`: proofs, the fixed checker and its records), and the judge with and without the Mathlib definitions each output uses (`definitions_experiment/`). |
 | `benchmark/known_issues.csv` | Statements found to be false as written (as in their sources), changed during extraction, or dependent on an undefined term. |
 | `analysis/` | `reproduce.py` recomputes every number in the paper from the files above; `figures/` redraws the figures. |
 | `code/` | The agent, its tools and prompts, the judges, and the one-shot baselines. |
@@ -66,6 +66,8 @@ python analysis/figures/fig_main_results.py docs/figure1.pdf
 python analysis/figures/fig_multi_model.py figure5.pdf
 python analysis/figures/fig_disagreement.py figure3.pdf
 python analysis/figures/fig_judge_regime.py judge_regime.pdf   # newer models: when rejections stop being informative
+python analysis/review_v4.py           # writes analysis/review_v4.json: the review's validation and every system's rejections
+python analysis/figures/fig_judge_regime_v4.py judge_regime_v4.pdf   # the same figure with all eleven systems
 python analysis/figures/appendix_figs.py .
 ```
 

@@ -1,0 +1,34 @@
+You are reviewing Lean 4 statement formalizations for a research paper (Beyond Compilation, statement autoformalization). Decide, for each item, WHY a compiling formalization was rejected by the semantic judge. Be rigorous and adversarial toward everyone: the model, the judge, and the benchmark statement itself. Do not defer to the judge's opinion; decide on the mathematical merits.
+
+## Input
+Read: <work>/batch1.json
+
+It is a list of benchmark statements. Each has:
+- `id`, `name`, `domain`, `nl` (the natural-language statement given to the models, verbatim),
+- `source`: the textbook provenance from benchmark cleaning (`verdict` SAME means the cleaning judged the statement to match its source; `confidence`; `source_itself_flawed` true means the textbook itself is known to be imprecise there; `source_evidence` is a short quote; `source_repo` and `source_line`),
+- `astra` and `opus`: outputs of two frontier models (GPT-6 Astra, Claude Opus 5.5), each with `compile` (compiles in Lean 4 v4.22.0-rc4 with Mathlib rev fc58204e), `lean` (the generated file; proofs are `sorry`), `gpt52` (GPT-5.2 judge grade 0-10; >=9 means accepted), `gpt52_reason`, `sonnet5` (Claude Sonnet 5 grade, a second opinion), `sonnet5_reason`,
+- `rejected_by`: which model outputs compiled but got GPT-5.2 grade < 9. Review exactly these outputs.
+
+The judges were asked whether the Lean statement expresses the same mathematical claim as the NL statement; proofs are ignored; reasonable auxiliary definitions are allowed; vacuous placeholders are not.
+
+## Textbook sources (to check context)
+Local copies of the source LaTeX are under <projects>/beyond-benchmark-review/sources/ (AbstractAlgebraBook = Doty algebra; topology-lecture-notes = McKay topology; ra = Lebl real analysis; ca = Lebl complex analysis). Find the passage by grepping for a distinctive phrase from `source_evidence` or `nl`, and read the surrounding context (definitions, conventions, the surrounding exercise) when it matters.
+
+## Optional Lean checks
+You may verify Mathlib definitions or small claims with the local Lean REPL (same versions as the outputs). Write a file such as <work>/lean_checks/batch1/check_<id>.lean starting with `import Mathlib`, then run:
+  cd <projects>/repl && printf '%s\n\n' '{"path": "<absolute path to file>", "allTactics": false}' | lake exe repl
+Each run takes about 10 seconds. Run at most one at a time; use them only where a definition or convention decides the case (e.g. what a Mathlib notion means, division/inverse/subtraction conventions, coercions, whether a hypothesis is vacuous). Never edit any file outside that lean_checks folder.
+
+## Categories for each rejected output
+- `T` translation error: the Lean statement is not faithful to the NL statement as written. State exactly what differs (missing/extra hypothesis, wrong domain or type, strengthened/weakened conclusion, wrong quantifier, vacuous or trivially true statement, Mathlib convention that changes meaning). Give a concrete reason or counterexample when possible. Also give `severity`: `major` (a materially different theorem) or `minor` (a small but real deviation).
+- `B` benchmark issue: the NL statement itself is defective, so a faithful formalization is impossible or ill-defined: undefined notation or context that the statement depends on but does not state, ambiguity with several reasonable readings where the model chose a reasonable one, the statement is false or vacuous as written, or it does not match its textbook source. Say what is wrong with the NL statement.
+- `J` judge too strict: the Lean statement is a faithful formalization (possibly a different but equivalent or standard encoding); the judge's objection is mistaken or only about style. Say why it is faithful.
+- `U` uncertain: you cannot decide; say precisely what would decide it.
+
+Independently of the models, also say whether the NL item itself has a problem (`benchmark_issue`: true/false with a one-sentence reason), and, when the other model's output was accepted (GPT-5.2 >= 9), whether that accepted output is actually faithful (one sentence) -- this is a useful contrast.
+
+## Output
+Write a JSON list to <work>/review_batch1.json with one object per statement:
+{"id": ..., "name": ..., "benchmark_issue": {"flag": true/false, "reason": "..."}, "outputs": {"<astra|opus>": {"category": "T|B|J|U", "severity": "major|minor|null", "explanation": "2-4 sentences, concrete, quoting the relevant Lean fragment", "lean_check": "what you verified in Lean, or null"}}, "other_model_accepted_output": "one sentence or null"}
+
+Keep explanations precise and short. Do not modify any project files. When done, reply with a compact table: id, model, category, one-line reason.
