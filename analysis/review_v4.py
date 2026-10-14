@@ -97,7 +97,7 @@ def earlier_systems(sens: float) -> dict:
         rows = [r for r in jsonl(REPO / "outputs" / "one_shot" / f"{f}.jsonl") if r.get("input_matches_benchmark", True) is not False]
         c = sum(r["compiles"] for r in rows)
         rejected = sum(1 for r in rows if r["compiles"] and r["gpt52_grade"] < 9)
-        mine = [r for r in rev if r["model"] == s]
+        mine = [r for r in rev if r["model"] == s and r.get("rejected_under", "GPT-5.2").startswith("GPT-5.2")]
         assert len(mine) == rejected, (s, len(mine), rejected)
         t = sum(r["final_category"] == "T" for r in mine)
         te = sum("T" in (r["first_review"]["category"], r["second_review"]["category"]) for r in mine)
@@ -115,6 +115,29 @@ def earlier_systems(sens: float) -> dict:
     for v in out.values():
         tot.update({"rejected": v["rejected"], "T": v["translation_errors"], "T_either": v["translation_errors_either_stage"]})
     out["total"] = dict(tot)
+    return out
+
+
+def table3() -> dict:
+    """Table 3: the gaps of Figure 2 (the criterion: compiles, GPT-5.2 and Gemini-2.5-Pro both >= 9) and how
+    much of each is translation errors. Earlier one-shot systems: the review of every criterion rejection.
+    The agent: the human majority of Batch A, which covers all its criterion rejections."""
+    rev = {(r["id"], r["model"]): r for r in jsonl(REPO / "checks" / "earlier_systems_review.jsonl")}
+    out = {}
+    for s, f in ONE_SHOT.items():
+        rows = [r for r in jsonl(REPO / "outputs" / "one_shot" / f"{f}.jsonl") if r.get("input_matches_benchmark", True) is not False]
+        rej = [r for r in rows if r["compiles"] and not r["faithful"]]
+        missing = [r["id"] for r in rej if (r["id"], s) not in rev]
+        assert not missing, (s, missing)
+        t = sum(rev[(r["id"], s)]["final_category"] == "T" for r in rej)
+        out[s] = {"statements": len(rows), "rejected": len(rej), "gap_pts": round(100 * len(rej) / len(rows), 1),
+                  "translation_errors": t, "real_gap_pts": round(100 * t / len(rows), 1),
+                  "real_share_of_gap": round(t / len(rej), 4)}
+    a = list(csv.DictReader((REPO / "human_audits" / "batch_A_agent_rejected.csv").open(encoding="utf-8")))
+    err = sum(r["human_majority_faithful"] == "0" for r in a)
+    out["GPT-5.2 agent"] = {"statements": 227, "rejected": len(a), "gap_pts": round(100 * len(a) / 227, 1),
+                            "translation_errors": err, "real_gap_pts": round(100 * err / 227, 1),
+                            "real_share_of_gap": round(err / len(a), 4), "labels": "human majority (Batch A)"}
     return out
 
 
@@ -148,7 +171,8 @@ def discussion_side() -> dict:
 def main() -> None:
     val = validation()
     sens = val["final_T"]["finds_errors"]["k"] / val["final_T"]["finds_errors"]["n"]
-    res = {"validation": val, "earlier_systems": earlier_systems(sens), "newer_models_bound": newer_bound(sens),
+    res = {"validation": val, "earlier_systems": earlier_systems(sens), "table3_criterion": table3(),
+           "newer_models_bound": newer_bound(sens),
            "discussion_followed": discussion_side()}
     (REPO / "analysis" / "review_v4.json").write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps(res, indent=1))
