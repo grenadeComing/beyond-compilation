@@ -387,5 +387,71 @@
    "second": 9,
    "first": 1
   }
+ },
+ "criterion_parity_batch_B": {
+  "n": 59,
+  "agreement_with_majority": {
+   "n": 59,
+   "agreement_pct": 91.5,
+   "kappa": 0.75
+  },
+  "held_out_reviewer": {
+   "R2": {
+    "reference": "R3+R4 agree",
+    "reviewer": {
+     "n": 50,
+     "agreement_pct": 80.0,
+     "kappa": 0.45
+    },
+    "criterion": {
+     "n": 50,
+     "agreement_pct": 96.0,
+     "kappa": 0.83
+    }
+   },
+   "R3": {
+    "reference": "R2+R4 agree",
+    "reviewer": {
+     "n": 44,
+     "agreement_pct": 90.9,
+     "kappa": 0.7
+    },
+    "criterion": {
+     "n": 44,
+     "agreement_pct": 93.2,
+     "kappa": 0.81
+    }
+   },
+   "R4": {
+    "reference": "R2+R3 agree",
+    "reviewer": {
+     "n": 41,
+     "agreement_pct": 97.6,
+     "kappa": 0.91
+    },
+    "criterion": {
+     "n": 41,
+     "agreement_pct": 92.7,
+     "kappa": 0.76
+    }
+   }
+  },
+  "reviewer_pairs": {
+   "R2-R3": {
+    "n": 58,
+    "agreement_pct": 75.9,
+    "kappa": 0.41
+   },
+   "R2-R4": {
+    "n": 55,
+    "agreement_pct": 80.0,
+    "kappa": 0.53
+   },
+   "R3-R4": {
+    "n": 56,
+    "agreement_pct": 91.1,
+    "kappa": 0.66
+   }
+  }
  }
 }

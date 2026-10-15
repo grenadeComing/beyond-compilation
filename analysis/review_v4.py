@@ -6,6 +6,7 @@ Inputs: checks/review_validation.jsonl (the two-stage review of the 69 compiling
 rejects and that humans labeled: the full agent in Batch A and Aristotle in Batch B),
 checks/earlier_systems_review.jsonl (the same review of the seven earlier one-shot systems' rejections),
 checks/newer_models_review.jsonl, checks/reviewer_validation.jsonl, human_audits/, outputs/.
+Also compares the criterion itself with the held-out reviewer on the random Batch-B sample.
 
 A review label T is a translation error. The review's sensitivity bounds the number X of real errors among
 a system's rejections whatever its false-flag rate: observed T = sens*X + fpr*(R - X) >= sens*X, so
@@ -168,12 +169,32 @@ def discussion_side() -> dict:
     return out
 
 
+def criterion_parity() -> dict:
+    """The criterion (compiles, GPT-5.2 and Gemini-2.5-Pro both >= 9) on the random Batch-B sample, compared like the
+    review: for each held-out reviewer, the outputs on which the other two agree. Reviewer labels are compile-aware
+    (faithful = compiles and score >= 9), as is the human majority."""
+    rows = [r for r in csv.DictReader((REPO / "human_audits" / "batch_B_aristotle_random.csv").open(encoding="utf-8"))
+            if r["aristotle_output"] == "True" and r["human_majority_faithful"] != ""]
+    lab = lambda r, k: None if r[k] == "" else int(r["compiles"] == "True" and float(r[k]) >= 9)  # noqa: E731
+    crit = lambda r: int(r["criterion_faithful"] == "True")  # noqa: E731
+    out = {"n": len(rows), "agreement_with_majority": kappa([(crit(r), int(r["human_majority_faithful"])) for r in rows]),
+           "held_out_reviewer": {}}
+    for j in ("R2", "R3", "R4"):
+        a, b = [x for x in ("R2", "R3", "R4") if x != j]
+        sub = [r for r in rows if None not in (lab(r, j), lab(r, a), lab(r, b)) and lab(r, a) == lab(r, b)]
+        out["held_out_reviewer"][j] = {"reference": f"{a}+{b} agree", "reviewer": kappa([(lab(r, j), lab(r, a)) for r in sub]),
+                                       "criterion": kappa([(crit(r), lab(r, a)) for r in sub])}
+    out["reviewer_pairs"] = {f"{a}-{b}": kappa([(lab(r, a), lab(r, b)) for r in rows if None not in (lab(r, a), lab(r, b))])
+                             for a, b in (("R2", "R3"), ("R2", "R4"), ("R3", "R4"))}
+    return out
+
+
 def main() -> None:
     val = validation()
     sens = val["final_T"]["finds_errors"]["k"] / val["final_T"]["finds_errors"]["n"]
     res = {"validation": val, "earlier_systems": earlier_systems(sens), "table3_criterion": table3(),
            "newer_models_bound": newer_bound(sens),
-           "discussion_followed": discussion_side()}
+           "discussion_followed": discussion_side(), "criterion_parity_batch_B": criterion_parity()}
     (REPO / "analysis" / "review_v4.json").write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps(res, indent=1))
 
