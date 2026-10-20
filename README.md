@@ -1,6 +1,6 @@
 # Beyond Compilation
 
-Code and data for **Beyond Compilation: Evaluating Faithful Natural-Language-to-Lean Statement Formalization** ([arXiv:2606.31002](https://arxiv.org/abs/2606.31002)).
+Code and data for **Beyond Compilation: Evaluating Faithful Natural-Language-to-Lean Statement Formalization** ([arXiv:2606.31002](https://arxiv.org/abs/2606.31002)), accepted at the MATH-AI Workshop @ NeurIPS 2026. The data are also on Hugging Face: [grenadeComing/beyond-compilation-benchmark](https://huggingface.co/datasets/grenadeComing/beyond-compilation-benchmark).
 
 A Lean declaration can compile while stating a different theorem from the one intended. We evaluate statement formalization without reference Lean targets. An output counts as **faithful** if it compiles in Lean 4 with Mathlib and both GPT-5.2 and Gemini-2.5-Pro grade it at least 9 out of 10. The paper studies two questions:
 

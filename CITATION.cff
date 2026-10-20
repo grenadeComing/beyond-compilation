@@ -1,0 +1,59 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the paper below."
+title: "Beyond Compilation: Evaluating Faithful Natural-Language-to-Lean Statement Formalization"
+authors:
+  - family-names: Zhang
+    given-names: Ke
+    affiliation: "University of California, Riverside"
+    orcid: "https://orcid.org/0009-0007-7018-2427"
+  - family-names: Gallardo Candela
+    given-names: Patricio
+    affiliation: "University of California, Riverside"
+  - family-names: Murthy
+    given-names: Sudhir
+    affiliation: "University of California, Riverside"
+  - family-names: Xie
+    given-names: Yi
+    affiliation: "University of Arizona"
+  - family-names: Wang
+    given-names: Zhi
+    affiliation: "University of California, San Diego"
+  - family-names: Raissi
+    given-names: Maziar
+    affiliation: "University of California, Riverside"
+repository-code: "https://github.com/grenadeComing/beyond-compilation"
+url: "https://arxiv.org/abs/2606.31002"
+license: MIT
+keywords:
+  - lean4
+  - mathlib
+  - autoformalization
+  - llm-evaluation
+  - benchmark
+preferred-citation:
+  type: article
+  title: "Beyond Compilation: Evaluating Faithful Natural-Language-to-Lean Statement Formalization"
+  authors:
+    - family-names: Zhang
+      given-names: Ke
+      affiliation: "University of California, Riverside"
+      orcid: "https://orcid.org/0009-0007-7018-2427"
+    - family-names: Gallardo Candela
+      given-names: Patricio
+      affiliation: "University of California, Riverside"
+    - family-names: Murthy
+      given-names: Sudhir
+      affiliation: "University of California, Riverside"
+    - family-names: Xie
+      given-names: Yi
+      affiliation: "University of Arizona"
+    - family-names: Wang
+      given-names: Zhi
+      affiliation: "University of California, San Diego"
+    - family-names: Raissi
+      given-names: Maziar
+      affiliation: "University of California, Riverside"
+  journal: "arXiv preprint arXiv:2606.31002"
+  year: 2026
+  doi: "10.48550/arXiv.2606.31002"
+  url: "https://arxiv.org/abs/2606.31002"
